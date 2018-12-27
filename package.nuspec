@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>reblGreen.Serialization.JsonSchema</id>
+    <version>$version$</version>
+    <title>reblGreen.Serialization.Json</title>
+    <authors>reblGreen Software</authors>
+    <owners>reblGreen Software</owners>
+    <iconUrl>https://avatars1.githubusercontent.com/u/31241141</iconUrl>
+    <licenseUrl>https://opensource.org/licenses/lgpl-license</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A PCL .NET Core class library for working with Json Schema draft 1.0 and JSON serialized object validation.</description>
+    <dependencies>
+        <dependency id="reblGreen.Serialization.Json" version="1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\reblGreen.Serialization.JsonSchema.dll" target="lib\reblGreen.Serialization.JsonSchema.dll"/>
+    <!-- Modified for Mono .mdb files
+    <file src="bin\Release\reblGreen.Serialization.JsonSchema.pdb" target="lib\reblGreen.Serialization.JsonSchema.pdb"/>
+    <file src="bin\Release\reblGreen.Serialization.JsonSchema.mdb" target="lib\reblGreen.Serialization.JsonSchema.mdb"/>
+    <file src="bin\Release\reblGreen.Serialization.JsonSchema.XML" target="lib\reblGreen.Serialization.JsonSchema.XML"/>
+    -->
+  </files>
+</package>

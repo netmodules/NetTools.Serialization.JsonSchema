@@ -1,0 +1,9 @@
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/bin/Debug/reblGreen.Serialization.JsonSchema.dll
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/bin/Debug/reblGreen.Serialization.JsonSchema.pdb
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/bin/Debug/reblGreen.Serialization.Json.dll
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/bin/Debug/System.Json.dll
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/obj/Debug/reblGreen.Serialization.JsonSchema.csprojAssemblyReference.cache
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/obj/Debug/reblGreen.Serialization.JsonSchema.csproj.CoreCompileInputs.cache
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/obj/Debug/reblGreen.Serialization.JsonSchema.csproj.CopyComplete
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/obj/Debug/reblGreen.Serialization.JsonSchema.dll
+/Users/johnearnshaw/Projects/reblGreen.Serialization.JsonSchema/obj/Debug/reblGreen.Serialization.JsonSchema.pdb
