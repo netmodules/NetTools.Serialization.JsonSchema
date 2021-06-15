@@ -7,6 +7,7 @@ namespace reblGreen.Serialization.TestApplication
     {
         static void Main(string[] args)
         {
+            JsonSchema.GenerateJsonSchemaFromObject<DummyEvent>();
             Console.WriteLine("Hello World!");
         }
     }

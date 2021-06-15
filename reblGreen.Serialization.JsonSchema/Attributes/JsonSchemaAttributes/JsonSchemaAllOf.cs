@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace reblGreen.Serialization.JsonSchemaAttributes
+{
+    /// <summary>
+    /// Valid on any type: Must be of type JsonSchemaAttribute. The current schema must be valid against all of the subschemas. 
+    /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
+    public class JsonSchemaAllOf : JsonSchemaAttribute
+    {
+        public JsonSchemaAllOf(params object[] attributes)
+        {
+
+        }
+
+        public JsonSchemaAllOf(Type type)
+        {
+
+        }
+    }
+}
