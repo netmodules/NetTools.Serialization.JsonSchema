@@ -6,5 +6,6 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 {
     internal class JsonSchemaTypeMappings
     {
+
     }
 }

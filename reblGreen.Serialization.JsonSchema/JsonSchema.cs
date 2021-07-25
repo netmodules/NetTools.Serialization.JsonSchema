@@ -1,4 +1,5 @@
-﻿using System;
+﻿using reblGreen.Serialization.JsonSchemaClasses;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,16 @@ namespace reblGreen.Serialization
         /// <summary>
         /// 
         /// </summary>
-        public static Dictionary<string, object> GenerateJsonSchemaFromObject<T>()
+        public JsonSchema(string @schemaUrl)
+        {
+
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<string, object> GenerateJsonSchemaFromObject<T>()
         {
             return GenerateJsonSchemaFromObject(typeof(T));
         }
@@ -19,16 +29,14 @@ namespace reblGreen.Serialization
         /// <summary>
         /// 
         /// </summary>
-        public static Dictionary<string, object> GenerateJsonSchemaFromObject(Type t)
+        public Dictionary<string, object> GenerateJsonSchemaFromObject(Type t)
         {
-            var type = typeof(T);
-
-            if (type.IsPrimitive || type is IEnumerable)
+            if (t.IsPrimitive)
             {
-                throw new NotSupportedException($"Type {type.GetType()} is not supported!");
+                throw new NotSupportedException($"Type {t} is not supported!");
             }
 
-            return null;
+            return GetRecursiveSchema(t);
         }
 
 
@@ -37,6 +45,7 @@ namespace reblGreen.Serialization
         /// </summary>
         Dictionary<string, object> GetRecursiveSchema(Type t)
         {
+            var schemaMembers = ReflectionHelpers.GetSchemaMembers(t);
             return null;
         }
     }

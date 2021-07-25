@@ -15,6 +15,7 @@ namespace reblGreen.Serialization.TestApplication
     internal class DummyEvent //: IEvent
     {
         [JsonName("name")]
+        [JsonSchema(Description = "Enter a password length between 8 and 128", Maximum = 128, Minimum = 8)]
         public EventName Name { get; set; }
 
         [JsonName("meta"), JsonIgnore]
