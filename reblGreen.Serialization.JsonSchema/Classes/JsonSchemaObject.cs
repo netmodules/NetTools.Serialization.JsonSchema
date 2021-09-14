@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+
+namespace reblGreen.Serialization.JsonSchemaClasses
+{
+    public class JsonSchemaObject
+    {
+        public string Name { get; set; }
+
+        public PrimitiveType PrimitiveType { get; set; }
+
+        public TypeInfo TypeInfo { get; set; }
+
+        public List<JsonSchemaAttribute> Attributes { get; set; }
+
+        public List<JsonSchemaObject> Members { get; set; }
+    }
+}
