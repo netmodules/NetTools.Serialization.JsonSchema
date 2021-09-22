@@ -13,14 +13,14 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class JsonSchemaAdditionalProperty : JsonSchemaAttribute
     {
-        public JsonSchemaAdditionalProperty(params object[] attributes)
-        {
+        //public JsonSchemaAdditionalProperty(params object[] attributes)
+        //{
 
-        }
+        //}
 
         public JsonSchemaAdditionalProperty(Type type)
         {
-
+            
         }
 
         /// <summary>

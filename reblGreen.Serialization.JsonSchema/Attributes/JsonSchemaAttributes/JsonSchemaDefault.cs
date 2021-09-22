@@ -10,8 +10,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// be used by the json-schema generator.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaDefault : Attribute
+    public class JsonSchemaDefault : JsonSchemaAttribute
     {
-        public JsonSchemaDefault(object @default) { }
+        public JsonSchemaDefault(object @default)
+        {
+            Default = @default;
+        }
     }
 }

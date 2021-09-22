@@ -167,7 +167,7 @@ namespace reblGreen.Serialization
         /// schema. Here, we’ll reuse the example schema above, but set additionalItems to false, which has the effect of disallowing extra
         /// items in the array. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
         /// </summary>
-        public bool AdditionalItems = true;
+        public bool AdditionalItems = false;
 
         /// <summary>
         /// Valid on array: The length of the array can be specified using the minItems and maxItems keywords. The value of each keyword must be a 
@@ -257,7 +257,13 @@ namespace reblGreen.Serialization
             /// The null type is generally used to represent a missing value.
             /// When a schema specifies a type of null, it has only one acceptable value: null.
             /// </summary>
-            Null
+            Null,
+
+            /// <summary>
+            /// Any is a custom type added by reblGreen.Serialization.JsonSchemaAttributes.Events that specifies in the schema
+            /// that a property can have its value set to any object type
+            /// </summary>
+            Any
         }
 
         /// <summary>

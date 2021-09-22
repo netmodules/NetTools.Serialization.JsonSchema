@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,10 @@
     <!-- Forces nuget packages to be copied to the build output directory. Required nuget package for external Modules to be loaded by ModuleHost. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="reblGreen.NetCore.Modules" Version="1.1.6" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\reblGreen.Serialization.JsonSchema\reblGreen.Serialization.JsonSchema.csproj" />

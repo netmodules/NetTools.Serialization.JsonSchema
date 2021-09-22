@@ -15,7 +15,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
              * String values MUST be one of the six primitive types ("null", "boolean", "object", "array", "number", or "string"), or "integer" which matches any number with a zero fractional part.
              * An instance validates if and only if the instance is in any of the sets listed for this keyword.
              */
-            if (type.IsPointer || type.IsPrimitive)
+            if (type.IsPointer || type.IsPrimitive || type == typeof(string))
             {
                 // If the type is bool we simply check if json is "true" or "false". If it isn't either then we must assume false since we need to return a non-nullable object.
                 if (type == typeof(string))
@@ -62,11 +62,16 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(uint.MinValue, uint.MaxValue));
 
             if (typeof(IDictionary).IsAssignableFrom(type))
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Object);
+            {
+                var genericTypes = JsonSchemaHelpers.BaseGenericTypes(type);
+                return new PrimitiveType(JsonSchemaAttribute.BasicType.Object, genericTypes);
+            }
 
             if (typeof(ICollection).IsAssignableFrom(type))
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Array);
-
+            {
+                var genericTypes = JsonSchemaHelpers.BaseGenericTypes(type);
+                return new PrimitiveType(JsonSchemaAttribute.BasicType.Array, genericTypes);
+            }
             return null;
         }
     }

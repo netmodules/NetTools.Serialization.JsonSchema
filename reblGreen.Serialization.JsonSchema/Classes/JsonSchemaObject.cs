@@ -13,7 +13,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
         public TypeInfo TypeInfo { get; set; }
 
-        public List<JsonSchemaAttribute> Attributes { get; set; }
+        public JsonSchemaAttribute Attribute { get; set; }
 
         public List<JsonSchemaObject> Members { get; set; }
     }

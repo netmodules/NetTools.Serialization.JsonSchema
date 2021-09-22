@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using reblGreen.Serialization.JsonSchemaAttributes;
+using reblGreen.Serialization.JsonSchemaInterfaces;
 
 namespace reblGreen.Serialization.JsonSchemaClasses
 {
@@ -56,41 +57,85 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 TypeInfo = type.GetTypeInfo(),
             };
 
-            if (attributes != null && attributes.Count > 0)
-            {
-                schemaObject.Attributes = attributes;
-            }
+            JsonSchemaAttribute attribute = null;
+            PrimitiveType primitiveType = null;
+            JsonSchemaObject overrideSchema = null;
 
-            var primitiveType = PrimitiveTypes.GetPrimitiveType(type);
-
-            if (primitiveType != null)
+            if (attributes != null & attributes.Count > 0)
             {
-                schemaObject.PrimitiveType = primitiveType;
+                attribute = MergeJsonSchemaAttributes(attributes.ToArray());
+                schemaObject.Attribute = attribute;
+
+                if (attribute.TypeOverride != null)
+                {
+                    type = attribute.TypeOverride;
+                    primitiveType = PrimitiveTypes.GetPrimitiveType(type);
+
+                    overrideSchema = GetSchemaObject(type, depth, maxDepth);
+
+                    if (overrideSchema.Attribute != null)
+                    {
+                        attributes = new List<JsonSchemaAttribute>() { overrideSchema.Attribute, attribute };
+                    }
+
+                    attribute = MergeJsonSchemaAttributes(attributes.ToArray());
+                    schemaObject.Attribute = attribute;
+                    schemaObject.PrimitiveType = primitiveType;
+                }
+                else
+                {
+                    primitiveType = PrimitiveTypes.GetPrimitiveType(type);
+
+                    if (primitiveType != null && primitiveType.Constraints != null)
+                    {
+                        attributes.Add(primitiveType.Constraints);
+                    }
+
+                    attribute = MergeJsonSchemaAttributes(attributes.ToArray());
+                    schemaObject.Attribute = attribute;
+                    schemaObject.PrimitiveType = primitiveType;
+                }
             }
             else
             {
-                var fields = type.GetFields().ToList();
-                var properties = type.GetProperties().ToList();
+                primitiveType = PrimitiveTypes.GetPrimitiveType(type);
 
-                if (fields.Count > 0 || properties.Count > 0)
+                if (primitiveType != null)
                 {
-                    schemaObject.Members = new List<JsonSchemaObject>();
+                    schemaObject.PrimitiveType = primitiveType;
 
-                    while (depth < maxDepth)
+                    if (primitiveType.Constraints != null)
                     {
-                        depth++;
+                        schemaObject.Attribute = primitiveType.Constraints;
+                    }
 
-                        foreach (var field in fields)
+                    schemaObject.PrimitiveType = primitiveType;
+                }
+                else
+                {
+                    var fields = type.GetFields().ToList();
+                    var properties = type.GetProperties().ToList();
+
+                    if (fields.Count > 0 || properties.Count > 0)
+                    {
+                        schemaObject.Members = new List<JsonSchemaObject>();
+
+                        while (depth < maxDepth)
                         {
-                            schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
-                        }
+                            depth++;
 
-                        foreach (var prop in properties)
-                        {
-                            schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
-                        }
+                            foreach (var field in fields)
+                            {
+                                schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
+                            }
 
-                        break;
+                            foreach (var prop in properties)
+                            {
+                                schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
+                            }
+
+                            break;
+                        }
                     }
                 }
             }
@@ -121,7 +166,38 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             }
         }
 
-        internal JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
+        internal static Type[] BaseGenericTypes<T>(T instance)
+        {
+            Type type;
+            Type objectType = typeof(object);//new object().GetType();
+
+            if (instance is Type t)
+            {
+                type = t;
+            }
+            else
+            {
+                type = instance.GetType();
+            }
+
+
+            if (!type.IsGenericType)
+            {
+                while (type.BaseType != objectType)
+                {
+                    type = type.BaseType;
+
+                    if (type.IsGenericType)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return type.GetGenericArguments();
+        }
+
+        internal static JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
         {
             if (attributes == null || attributes.Length == 0)
             {
@@ -166,6 +242,20 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             }
 
             return attributes[0];
+        }
+
+        public static Dictionary<string, object> CreateSchemaDictionary(JsonSchemaObject obj, IJsonSchemaObjectParser parser)
+        {
+            Dictionary<string, object> schema = parser.ParseSchemaObject(obj);
+
+            if (schema == null)
+            {
+                // Parse as standard object type???
+                schema = new Dictionary<string, object>();
+                schema.Add("type", "object");
+            }
+
+            return schema;
         }
     }
 }
