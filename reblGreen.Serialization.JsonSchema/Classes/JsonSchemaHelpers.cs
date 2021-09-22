@@ -113,28 +113,31 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 }
                 else
                 {
-                    var fields = type.GetFields().ToList();
-                    var properties = type.GetProperties().ToList();
-
-                    if (fields.Count > 0 || properties.Count > 0)
+                    if (!type.IsEnum)
                     {
-                        schemaObject.Members = new List<JsonSchemaObject>();
+                        var fields = type.GetFields().ToList();
+                        var properties = type.GetProperties().ToList();
 
-                        while (depth < maxDepth)
+                        if (fields.Count > 0 || properties.Count > 0)
                         {
-                            depth++;
+                            schemaObject.Members = new List<JsonSchemaObject>();
 
-                            foreach (var field in fields)
+                            while (depth < maxDepth)
                             {
-                                schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
-                            }
+                                depth++;
 
-                            foreach (var prop in properties)
-                            {
-                                schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
-                            }
+                                foreach (var field in fields)
+                                {
+                                    schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
+                                }
 
-                            break;
+                                foreach (var prop in properties)
+                                {
+                                    schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
+                                }
+
+                                break;
+                            }
                         }
                     }
                 }

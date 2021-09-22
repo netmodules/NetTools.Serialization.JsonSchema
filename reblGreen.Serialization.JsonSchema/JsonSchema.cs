@@ -36,10 +36,10 @@ namespace reblGreen.Serialization
         /// </summary>
         public Dictionary<string, object> GenerateJsonSchemaFromObject(Type t)
         {
-            if (t == typeof(string) || t.IsPrimitive)
-            {
-                throw new NotSupportedException($"Type {t.Name} is not supported as a top level JSON Schema object.");
-            }
+            //if (t == typeof(string) || t.IsPrimitive)
+            //{
+            //    throw new NotSupportedException($"Type {t.Name} is not supported as a top level JSON Schema object.");
+            //}
 
             return GetRecursiveSchema(t);
         }
@@ -122,7 +122,12 @@ namespace reblGreen.Serialization
 
         void PopulateSchemaDictionary(Dictionary<string, object> schema, JsonSchemaObject o)
         {
-            if (o.PrimitiveType != null)
+            if (o.TypeInfo.IsEnum && o.PrimitiveType == null && o.Attribute == null)
+            {
+                schema.Add("enum", System.Enum.GetNames(o.TypeInfo.AsType()));
+                return;
+            }
+            else if (o.PrimitiveType != null)
             {
                 schema.Add("type", o.PrimitiveType.Name.ToString().ToLowerInvariant());
             }
@@ -130,6 +135,14 @@ namespace reblGreen.Serialization
             {
                 schema.Add("type", "object");
                 return;
+            }
+            else if (o.TypeInfo.IsEnum && o.Attribute.TypeOverride == null)
+            {
+                schema.Add("enum", System.Enum.GetNames(o.TypeInfo.AsType()));
+            }
+            else if (o.Attribute.TypeOverride.IsEnum)
+            {
+                schema.Add("enum", System.Enum.GetNames(o.Attribute.TypeOverride));
             }
             else if (o.Attribute.Type != JsonSchemaAttribute.BasicType.Null)
             {

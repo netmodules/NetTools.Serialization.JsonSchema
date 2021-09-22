@@ -8,7 +8,10 @@ namespace reblGreen.Serialization.TestApplication
         static void Main(string[] args)
         {
             var jsonSchema = new JsonSchema(null, true);
-            //jsonSchema.GenerateJsonSchemaFromObject<string>();
+            var stringSchema = jsonSchema.GenerateJsonSchemaFromObject<string>();
+            var stringSchemaString = Json.ToJson(stringSchema).BeautifyJson();
+
+
             var dummySchema = jsonSchema.GenerateJsonSchemaFromObject<DummyEvent>();
             var dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
 

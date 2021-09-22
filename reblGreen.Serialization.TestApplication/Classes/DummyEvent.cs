@@ -25,5 +25,7 @@ namespace reblGreen.Serialization.TestApplication
 
         [JsonIgnore]
         public bool Handled { get; }
+
+        public TestEnum TestEnum { get; set; }
     }
 }
