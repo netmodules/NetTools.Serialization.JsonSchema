@@ -15,7 +15,7 @@ namespace reblGreen.Serialization.TestApplication
     [Serializable]
     [JsonSchema(Title = "Dummy Event",
         Description = "This is a dummy event")]
-    [JsonSchemaRequired("Name")]
+    [JsonSchemaRequired("Name"), JsonSchemaAdditionalProperties(false)]
     internal class DummyEvent //: IEvent
     {
         [JsonName("name")]

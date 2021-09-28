@@ -18,7 +18,9 @@ namespace reblGreen.Serialization
         /// Sets the base url that is used for adding an $id or a $ref link to the JSON schema object. If this is null,
         /// $id and $ref fields will not be added to the output JSON schema dictionary. This option is used by the
         /// default JsonSchemaObjectParser. If you are using a custom IJsonSchemaObjectParser, this property will be ignored
-        /// and preferred naming of properties must be implemented in the custom parser.
+        /// and preferred naming of properties must be implemented in the custom parser. PLEASE NOTE: It is the application
+        /// or person who is using reblGreen.Serialization.JsonSchema who is responsible for ensuring that any $ref or $id
+        /// urls return the correct JSON Schema object reference.
         /// </summary>
         public Uri SchemaRefUrl;
         

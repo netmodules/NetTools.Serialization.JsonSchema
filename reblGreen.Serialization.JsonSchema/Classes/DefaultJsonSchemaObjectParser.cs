@@ -37,14 +37,35 @@ namespace reblGreen.Serialization.JsonSchemaClasses
         {
             var schema = new Dictionary<string, object>();
 
-            if (Options.SchemaRefUrl != null)
+            // If the schema is top-level we add the schema draft property to the schema object.
+            if (!isRef)
             {
-                var refKey = isRef ? "$ref" : "$id";
-                schema.Add(refKey, Options.SchemaRefUrl.ToString() + o.TypeInfo.FullName);
+                schema.Add("$schema", SchemaDraft);
             }
 
+            // Deciding whether to add a schema reference or id... Id is used for top-level schema and ref is used for sub-schemas.
+            if (Options.SchemaRefUrl != null)
+            {
+                string refKey;
+
+                if (isRef)
+                {
+                    refKey = "$ref";
+                }
+                else
+                {
+                    refKey = "$id";
+                }
+
+                schema.Add(refKey, GetPrettySchemaRefString(o));
+            }
+
+
+            // Adding of all class-level JsonSchemaAttribute flags...
             PopulateSchemaDictionary(schema, o);
 
+
+            // Do sub-schemas for members (properties and fields)
             if (schema.TryGetValue("type", out var type) && o.Members != null)
             {
                 var strType = type.ToString();
@@ -73,7 +94,18 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                             name = m.Name;
                         }
 
-                        properties.Add(name, GetSchemaDictionaryFromJsonSchemaObject(m, true));
+                        if (Options.SchemaType == JsonSchemaOptions.JsonSchemaType.Nested)
+                        {
+                            properties.Add(name, GetSchemaDictionaryFromJsonSchemaObject(m, true));
+                        }
+                        else
+                        {
+                            if (Options.SchemaRefUrl != null)
+                            {
+                                var subSchemaRef = new Dictionary<string, object>() { { "$ref", GetPrettySchemaRefString(m) } };
+                                properties.Add(name, subSchemaRef);
+                            }
+                        }
 
                         if (m.Attribute != null && m.Attribute.Required != null)
                         {
@@ -230,6 +262,67 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
             if (o.Attribute.UniqueItems)
                 schema.Add("uniqueItems", true);
+        }
+
+
+        string GetPrettySchemaRefString(JsonSchemaObject o)
+        {
+            var schemaRef = Options.SchemaRefUrl.ToString();
+            string typeName = string.Empty;
+            List<string> generics = new List<string>();
+
+            if (o.PrimitiveType != null)
+            {
+                typeName = "." + o.PrimitiveType.Name.ToString();
+
+                if (o.PrimitiveType.Children != null)
+                {
+                    foreach (var c in o.PrimitiveType.Children)
+                    {
+                        var generic = c.FullName;
+                        var systemGeneric = generic.IndexOf("System.");
+
+                        if (systemGeneric == 0)
+                        {
+                            generic = generic.Substring(6);
+                            generics.Add(generic);
+                        }
+                    }
+                }
+            }
+            else if (o.Attribute != null && o.Attribute.TypeOverride != null)
+            {
+                var t = o.Attribute.TypeOverride;
+            }
+            else if (o.TypeInfo.IsGenericType)
+            {
+                typeName = o.TypeInfo.FullName;
+
+                foreach (var c in o.TypeInfo.GenericTypeArguments)
+                {
+                    var generic = c.FullName;
+                    var systemGeneric = generic.IndexOf("System.");
+
+                    if (systemGeneric == 0)
+                    {
+                        generic = generic.Substring(6);
+                        generics.Add(generic);
+                    }
+                }
+            }
+            else
+            {
+                typeName = o.TypeInfo.FullName;
+            }
+
+            var system = typeName.IndexOf("System.");
+
+            if (system == 0)
+            {
+                typeName = typeName.Substring(6); 
+            }
+
+            return schemaRef + typeName + (generics.Count > 0 ? "+" : "") + string.Join("+", generics) + ".json";
         }
     }
 }

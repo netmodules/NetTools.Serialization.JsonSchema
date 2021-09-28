@@ -7,6 +7,11 @@ namespace reblGreen.Serialization.TestApplication
     {
         static void Main(string[] args)
         {
+            /*
+             * If you're planning on implementing more JSON Schema specification in this project, here is the documentation:
+             * https://json-schema.org/understanding-json-schema/UnderstandingJSONSchema.pdf
+            */
+
             var jsonSchema = new JsonSchema(new JsonSchemaOptions()
             {
                 AutoCamelCase = true,
@@ -19,6 +24,13 @@ namespace reblGreen.Serialization.TestApplication
 
             var dummySchema = jsonSchema.FromType<DummyEvent>();
             var dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
+
+            jsonSchema = new JsonSchema(new JsonSchemaOptions()
+            {
+                AutoCamelCase = true,
+                SchemaRefUrl = new Uri("https://reblgreen.com/json-schema/"),
+                SchemaType = JsonSchemaOptions.JsonSchemaType.Shallow
+            });
 
             var settingSchema = jsonSchema.FromType<reblGreen.NetCore.Modules.Events.GetSettingEvent>();
             var settingSchemaString = Json.ToJson(settingSchema).BeautifyJson();
