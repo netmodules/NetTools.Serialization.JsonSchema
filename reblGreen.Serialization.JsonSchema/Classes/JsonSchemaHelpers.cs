@@ -10,9 +10,9 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 {
     internal class JsonSchemaHelpers
     {
-        internal static JsonSchemaObject GetSchemaObject<T>(T t, byte depth = 0, byte maxDepth = 15)
+        internal static JsonSchemaObject GetSchemaObject<T>(T t, byte maxDepth = 1, byte currentDepth = 0)
         {
-            var schemaObject = GetSchemaObjectFromType(t, depth, maxDepth);
+            var schemaObject = GetSchemaObjectFromType(t, maxDepth, currentDepth);
             var primitiveType = PrimitiveTypes.GetPrimitiveType(schemaObject.TypeInfo);
             List<JsonSchemaAttribute> attributes = new List<JsonSchemaAttribute>();
 
@@ -55,9 +55,9 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                     {
                         schemaObject.Members = new List<JsonSchemaObject>();
 
-                        while (depth < maxDepth)
+                        while (currentDepth < maxDepth)
                         {
-                            depth++;
+                            currentDepth++;
 
                             foreach (var field in fields)
                             {
@@ -67,7 +67,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                                     continue;
                                 }
 
-                                schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
+                                schemaObject.Members.Add(GetSchemaObject(field, maxDepth, currentDepth));
                             }
 
                             foreach (var prop in properties)
@@ -78,7 +78,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                                     continue;
                                 }
 
-                                schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
+                                schemaObject.Members.Add(GetSchemaObject(prop, maxDepth, currentDepth));
                             }
 
                             break;
@@ -91,13 +91,12 @@ namespace reblGreen.Serialization.JsonSchemaClasses
         }
 
 
-        static JsonSchemaObject GetSchemaObjectFromType<T>(T t, byte depth = 0, byte maxDepth = 15)
+        static JsonSchemaObject GetSchemaObjectFromType<T>(T t, byte maxDepth = 1, byte currentDepth = 0)
         {
             Type type;
             JsonSchemaName name;
             List<JsonSchemaAttribute> attributes;
             JsonSchemaAttribute attribute = null;
-            //PrimitiveType primitiveType = null;
             JsonSchemaObject overrideSchema = null;
 
             string namedObject = null;
@@ -142,9 +141,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 if (attribute.TypeOverride != null)
                 {
                     type = attribute.TypeOverride;
-                    //primitiveType = PrimitiveTypes.GetPrimitiveType(type);
-
-                    overrideSchema = GetSchemaObject(type, depth, maxDepth);
+                    overrideSchema = GetSchemaObject(type, maxDepth, currentDepth);
 
                     if (overrideSchema.Attribute != null)
                     {
@@ -152,19 +149,10 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                     }
 
                     attribute = MergeJsonSchemaAttributes(attributes.ToArray());
-                    //schemaObject.PrimitiveType = primitiveType;
                 }
                 else
                 {
-                    //primitiveType = PrimitiveTypes.GetPrimitiveType(type);
-
-                    //if (primitiveType != null && primitiveType.Constraints != null)
-                    //{
-                    //    attributes.Add(primitiveType.Constraints);
-                    //}
-
                     attribute = MergeJsonSchemaAttributes(attributes.ToArray());
-                    //schemaObject.PrimitiveType = primitiveType;
                 }
             }
 
@@ -177,7 +165,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
         }
 
 
-        internal static Type GetMemberType(MemberInfo member)
+        static Type GetMemberType(MemberInfo member)
         {
             switch (member.MemberType)
             {
@@ -230,7 +218,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             return type.GetGenericArguments();
         }
 
-        internal static JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
+        static JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
         {
             if (attributes == null || attributes.Length == 0)
             {
@@ -296,20 +284,6 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             }
 
             return attributes[0];
-        }
-
-        public static Dictionary<string, object> CreateSchemaDictionary(JsonSchemaObject obj, IJsonSchemaObjectParser parser)
-        {
-            Dictionary<string, object> schema = parser.ParseSchemaObject(obj);
-
-            if (schema == null)
-            {
-                // Parse as standard object type???
-                schema = new Dictionary<string, object>();
-                schema.Add("type", "object");
-            }
-
-            return schema;
         }
     }
 }

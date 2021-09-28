@@ -7,6 +7,6 @@ namespace reblGreen.Serialization.JsonSchemaInterfaces
 {
     public interface IJsonSchemaObjectParser
     {
-        Dictionary<string, object> ParseSchemaObject(JsonSchemaObject obj);
+        Dictionary<string, object> GetSchemaDictionaryFromJsonSchemaObject(JsonSchemaObject obj);
     }
 }
