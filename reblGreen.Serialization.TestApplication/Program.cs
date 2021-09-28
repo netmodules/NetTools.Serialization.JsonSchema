@@ -15,8 +15,8 @@ namespace reblGreen.Serialization.TestApplication
             var dummySchema = jsonSchema.GenerateJsonSchemaFromObject<DummyEvent>();
             var dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
 
-            //var schema = jsonSchema.GenerateJsonSchemaFromObject<reblGreen.NetCore.Modules.Events.GetSettingEvent>();
-            //var schemaString = Json.ToJson(schema).BeautifyJson();
+            var settingSchema = jsonSchema.GenerateJsonSchemaFromObject<reblGreen.NetCore.Modules.Events.GetSettingEvent>();
+            var settingSchemaString = Json.ToJson(settingSchema).BeautifyJson();
 
             Console.WriteLine(dummySchemaString);
         }

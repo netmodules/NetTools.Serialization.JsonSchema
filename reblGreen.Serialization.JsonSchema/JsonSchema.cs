@@ -69,7 +69,7 @@ namespace reblGreen.Serialization
         Dictionary<string, object> GetRecursiveSchema(Type t, IJsonSchemaObjectParser parser = null)
         {
             var schemaObject = GetJsonSchemaObject(t, 15, null);
-            return GetJsonSchemaFromSchemaObject(schemaObject, parser);
+            return GetJsonSchemaFromSchemaObject(schemaObject, false, parser);
         }
 
         public JsonSchemaObject GetJsonSchemaObject(Type t, byte maxDepth, Uri schemaUrl)
@@ -81,13 +81,14 @@ namespace reblGreen.Serialization
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<string, object> GetJsonSchemaFromSchemaObject(JsonSchemaObject o, IJsonSchemaObjectParser parser = null)
+        Dictionary<string, object> GetJsonSchemaFromSchemaObject(JsonSchemaObject o, bool isRef = false, IJsonSchemaObjectParser parser = null)
         {
             var schema = new Dictionary<string, object>();
 
             if (SchemaUrl != null)
             {
-                schema.Add("$ref", SchemaUrl.ToString() + o.TypeInfo.FullName);
+                var refKey = isRef ? "$ref" : "$id";
+                schema.Add(refKey, SchemaUrl.ToString() + o.TypeInfo.FullName);
             }
 
             PopulateSchemaDictionary(schema, o);
@@ -120,7 +121,7 @@ namespace reblGreen.Serialization
                             name = m.Name;
                         }
 
-                        properties.Add(name, GetJsonSchemaFromSchemaObject(m));
+                        properties.Add(name, GetJsonSchemaFromSchemaObject(m, true));
 
                         if (m.Attribute != null && m.Attribute.Required != null)
                         {
@@ -157,7 +158,7 @@ namespace reblGreen.Serialization
         {
             if (o.TypeInfo.IsEnum && o.PrimitiveType == null && o.Attribute == null)
             {
-                schema.Add("enum", System.Enum.GetNames(o.TypeInfo.AsType()));
+                schema.Add("enum", Enum.GetNames(o.TypeInfo.AsType()));
                 return;
             }
             else if (o.PrimitiveType != null)
@@ -171,11 +172,11 @@ namespace reblGreen.Serialization
             }
             else if (o.TypeInfo.IsEnum && o.Attribute.TypeOverride == null)
             {
-                schema.Add("enum", System.Enum.GetNames(o.TypeInfo.AsType()));
+                schema.Add("enum", Enum.GetNames(o.TypeInfo.AsType()));
             }
             else if (o.Attribute.TypeOverride != null && o.Attribute.TypeOverride.IsEnum)
             {
-                schema.Add("enum", System.Enum.GetNames(o.Attribute.TypeOverride));
+                schema.Add("enum", Enum.GetNames(o.Attribute.TypeOverride));
             }
             else if (o.Attribute.Type != JsonSchemaAttribute.BasicType.Null)
             {
