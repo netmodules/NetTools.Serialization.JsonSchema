@@ -11,14 +11,9 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class JsonSchemaOneOf : JsonSchemaAttribute
     {
-        public JsonSchemaOneOf(params object[] attributes)
-        {
-
-        }
-
         public JsonSchemaOneOf(Type type)
         {
-
+            throw new Exception("JsonSchemaOneOf is currently not supported.");
         }
     }
 }

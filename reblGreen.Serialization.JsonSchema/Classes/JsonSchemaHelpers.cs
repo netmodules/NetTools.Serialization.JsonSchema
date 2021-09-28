@@ -12,9 +12,93 @@ namespace reblGreen.Serialization.JsonSchemaClasses
     {
         internal static JsonSchemaObject GetSchemaObject<T>(T t, byte depth = 0, byte maxDepth = 15)
         {
+            var schemaObject = GetSchemaObjectFromType(t, depth, maxDepth);
+            var primitiveType = PrimitiveTypes.GetPrimitiveType(schemaObject.TypeInfo);
+            List<JsonSchemaAttribute> attributes = new List<JsonSchemaAttribute>();
+
+            if (schemaObject == null)
+            {
+                var typeInfo = t.GetType().GetTypeInfo();
+
+                schemaObject = new JsonSchemaObject()
+                {
+                    Attribute = primitiveType.Constraints,
+                    PrimitiveType = primitiveType,
+                    TypeInfo = typeInfo,
+                    Name = typeInfo.Name
+                };
+            }
+
+            if (primitiveType != null)
+            {
+                schemaObject.PrimitiveType = primitiveType;
+
+                if (primitiveType.Constraints != null)
+                {
+                    if (schemaObject.Attribute != null)
+                    {
+                        attributes.Add(schemaObject.Attribute);
+                    }
+
+                    attributes.Add(primitiveType.Constraints);
+                    schemaObject.Attribute = MergeJsonSchemaAttributes(attributes.ToArray());
+                }
+            }
+            else
+            {
+                if (!schemaObject.TypeInfo.IsEnum)
+                {
+                    var fields = schemaObject.TypeInfo.GetFields().ToList();
+                    var properties = schemaObject.TypeInfo.GetProperties().ToList();
+
+                    if (fields.Count > 0 || properties.Count > 0)
+                    {
+                        schemaObject.Members = new List<JsonSchemaObject>();
+
+                        while (depth < maxDepth)
+                        {
+                            depth++;
+
+                            foreach (var field in fields)
+                            {
+                                // Attempt to stop loops where a member is an instance of the current type.
+                                if (field.FieldType == schemaObject.TypeInfo.AsType())
+                                {
+                                    continue;
+                                }
+
+                                schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
+                            }
+
+                            foreach (var prop in properties)
+                            {
+                                // Attempt to stop loops where a member is an instance of the current type.
+                                if (prop.PropertyType == schemaObject.TypeInfo.AsType())
+                                {
+                                    continue;
+                                }
+
+                                schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return schemaObject;
+        }
+
+
+        static JsonSchemaObject GetSchemaObjectFromType<T>(T t, byte depth = 0, byte maxDepth = 15)
+        {
             Type type;
             JsonSchemaName name;
             List<JsonSchemaAttribute> attributes;
+            JsonSchemaAttribute attribute = null;
+            //PrimitiveType primitiveType = null;
+            JsonSchemaObject overrideSchema = null;
 
             string namedObject = null;
 
@@ -26,7 +110,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 if (name != null)
                 {
-                    namedObject = name.GetName();
+                    namedObject = name.Name;
                 }
 
                 if (string.IsNullOrWhiteSpace(namedObject))
@@ -42,7 +126,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 if (name != null)
                 {
-                    namedObject = name.GetName();
+                    namedObject = name.Name;
                 }
 
                 if (string.IsNullOrWhiteSpace(namedObject))
@@ -51,25 +135,14 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 }
             }
 
-            var schemaObject = new JsonSchemaObject()
-            {
-                Name = namedObject,
-                TypeInfo = type.GetTypeInfo(),
-            };
-
-            JsonSchemaAttribute attribute = null;
-            PrimitiveType primitiveType = null;
-            JsonSchemaObject overrideSchema = null;
-
             if (attributes != null & attributes.Count > 0)
             {
                 attribute = MergeJsonSchemaAttributes(attributes.ToArray());
-                schemaObject.Attribute = attribute;
-
+                
                 if (attribute.TypeOverride != null)
                 {
                     type = attribute.TypeOverride;
-                    primitiveType = PrimitiveTypes.GetPrimitiveType(type);
+                    //primitiveType = PrimitiveTypes.GetPrimitiveType(type);
 
                     overrideSchema = GetSchemaObject(type, depth, maxDepth);
 
@@ -79,71 +152,28 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                     }
 
                     attribute = MergeJsonSchemaAttributes(attributes.ToArray());
-                    schemaObject.Attribute = attribute;
-                    schemaObject.PrimitiveType = primitiveType;
+                    //schemaObject.PrimitiveType = primitiveType;
                 }
                 else
                 {
-                    primitiveType = PrimitiveTypes.GetPrimitiveType(type);
+                    //primitiveType = PrimitiveTypes.GetPrimitiveType(type);
 
-                    if (primitiveType != null && primitiveType.Constraints != null)
-                    {
-                        attributes.Add(primitiveType.Constraints);
-                    }
+                    //if (primitiveType != null && primitiveType.Constraints != null)
+                    //{
+                    //    attributes.Add(primitiveType.Constraints);
+                    //}
 
                     attribute = MergeJsonSchemaAttributes(attributes.ToArray());
-                    schemaObject.Attribute = attribute;
-                    schemaObject.PrimitiveType = primitiveType;
+                    //schemaObject.PrimitiveType = primitiveType;
                 }
             }
-            else
+
+            return new JsonSchemaObject()
             {
-                primitiveType = PrimitiveTypes.GetPrimitiveType(type);
-
-                if (primitiveType != null)
-                {
-                    schemaObject.PrimitiveType = primitiveType;
-
-                    if (primitiveType.Constraints != null)
-                    {
-                        schemaObject.Attribute = primitiveType.Constraints;
-                    }
-
-                    schemaObject.PrimitiveType = primitiveType;
-                }
-                else
-                {
-                    if (!type.IsEnum)
-                    {
-                        var fields = type.GetFields().ToList();
-                        var properties = type.GetProperties().ToList();
-
-                        if (fields.Count > 0 || properties.Count > 0)
-                        {
-                            schemaObject.Members = new List<JsonSchemaObject>();
-
-                            while (depth < maxDepth)
-                            {
-                                depth++;
-
-                                foreach (var field in fields)
-                                {
-                                    schemaObject.Members.Add(GetSchemaObject(field, depth, maxDepth));
-                                }
-
-                                foreach (var prop in properties)
-                                {
-                                    schemaObject.Members.Add(GetSchemaObject(prop, depth, maxDepth));
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return schemaObject;
+                Name = namedObject,
+                TypeInfo = type.GetTypeInfo(),
+                Attribute = attribute,
+            };
         }
 
 
@@ -242,6 +272,27 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 attribute.TypeOverride = attribute.TypeOverride != null ? attribute.TypeOverride : other.TypeOverride;
                 attribute.UniqueItems = attribute.UniqueItems | other.UniqueItems;
 
+                // Merge required properties array...
+                if (attribute.Required != null && attribute.Required is string[] req1 && other.Required != null && other.Required is string[] req2)
+                {
+                    var len = req1.Length;
+
+                    Array.Resize(ref req1, req1.Length + req2.Length);
+                    
+                    foreach (var s in req2)
+                    {
+                        req1[len] = s;
+                        len++;
+                    }
+                }
+                else if (attribute.Required != null && attribute.Required is bool b1 && other.Required != null && other.Required is bool b2)
+                {
+                    attribute.Required = b1 || b2;
+                }
+                else if (attribute.Required == null)
+                {
+                    attribute.Required = other.Required;
+                }
             }
 
             return attributes[0];

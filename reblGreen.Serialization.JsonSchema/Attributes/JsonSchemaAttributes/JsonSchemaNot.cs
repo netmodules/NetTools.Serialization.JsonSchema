@@ -11,9 +11,9 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class JsonSchemaNot : JsonSchemaAttribute
     {
-        public JsonSchemaNot(params object[] attributes)
+        public JsonSchemaNot()
         {
-
+            throw new Exception("JsonSchemaNot is currently not supported.");
         }
     }
 }

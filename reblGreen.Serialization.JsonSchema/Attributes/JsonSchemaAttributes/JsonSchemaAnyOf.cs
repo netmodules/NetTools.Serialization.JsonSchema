@@ -13,12 +13,12 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     {
         public JsonSchemaAnyOf(params object[] attributes)
         {
-
+            throw new NotImplementedException("JsonSchemaAnyOf is currently not supported.");
         }
 
-        public JsonSchemaAnyOf(Type type)
+        public JsonSchemaAnyOf(List<JsonSchemaAttribute> anyOf)
         {
-
+            throw new NotImplementedException("JsonSchemaAnyOf is currently not supported.");
         }
     }
 }

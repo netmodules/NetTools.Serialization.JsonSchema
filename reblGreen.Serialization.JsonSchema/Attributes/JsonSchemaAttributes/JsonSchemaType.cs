@@ -9,7 +9,7 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     {
         public JsonSchemaType(BasicType type)
         {
-
+            Type = type;
         }
     }
 }

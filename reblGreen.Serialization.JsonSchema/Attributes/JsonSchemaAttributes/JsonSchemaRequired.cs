@@ -11,12 +11,34 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// field should be set at class level or could be ignored by the schema generator.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaRequired : Attribute
+    public class JsonSchemaRequired : JsonSchemaAttribute
     {
-        public JsonSchemaRequired() { }
+        public JsonSchemaRequired()
+        {
+            Required = true;
+        }
 
+        public JsonSchemaRequired(params string[] attributes) 
+        {
+            Required = attributes;
+        }
 
-        public JsonSchemaRequired(params string[] attributes) { }
+        public JsonSchemaRequired(List<string> attributes)
+        {
+            Required = attributes.ToArray();
+        }
 
+        public JsonSchemaRequired(string attribute)
+        {
+            if (Required == null || Required is bool)
+            {
+                Required = new string[] { attribute };
+            }
+            else if (Required is string[] arr)
+            {
+                Array.Resize(ref arr, arr.Length + 1);
+                arr[arr.Length] = attribute;
+            }
+        }
     }
 }

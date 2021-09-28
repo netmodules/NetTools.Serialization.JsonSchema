@@ -15,12 +15,12 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     {
         public JsonSchemaPatternProperty(string pattern, params object[] attributes)
         {
-
+            throw new Exception("JsonSchemaPatternProperty is currently not supported.");
         }
 
         public JsonSchemaPatternProperty(string pattern, Type type)
         {
-
+            throw new Exception("JsonSchemaPatternProperty is currently not supported.");
         }
     }
 }

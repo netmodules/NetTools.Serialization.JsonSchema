@@ -7,6 +7,8 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 {
     internal class DefaultJsonSchemaObjectParser : IJsonSchemaObjectParser
     {
+        string SchemaDraft = "https://json-schema.org/draft/2020-12/schema";
+
         public Dictionary<string, object> ParseSchemaObject(JsonSchemaObject obj)
         {
             JsonSchemaAttribute attribute = null;

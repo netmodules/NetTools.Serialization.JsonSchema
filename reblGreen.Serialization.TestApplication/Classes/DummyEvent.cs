@@ -1,5 +1,6 @@
 ﻿//using reblGreen.NetCore.Modules.Interfaces;
 using reblGreen.Serialization.Attributes;
+using reblGreen.Serialization.JsonSchemaAttributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,9 @@ namespace reblGreen.Serialization.TestApplication
     /// identify the concrete object type
     /// </summary>
     [Serializable]
+    [JsonSchema(Title = "Dummy Event",
+        Description = "This is a dummy event")]
+    [JsonSchemaRequired("Name")]
     internal class DummyEvent //: IEvent
     {
         [JsonName("name")]
@@ -20,7 +24,7 @@ namespace reblGreen.Serialization.TestApplication
         [JsonSchema(TypeOverride = typeof(string))]
         public EventName Name { get; set; }
 
-        [JsonName("meta"), JsonIgnore]
+        [JsonName("meta"), JsonIgnore, JsonSchemaRequired]
         public Dictionary<string, object> Meta { get; set; }
 
         [JsonIgnore]

@@ -11,11 +11,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// against the enclosing schema. The following is an example for validating street light colors: "enum": ["red", "amber", "green"]
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaEnum : Attribute
+    public class JsonSchemaEnum : JsonSchemaAttribute
     {
         public JsonSchemaEnum(params object[] attributes)
         {
-
+            throw new NotImplementedException("JsonSchemaEnum is currently not supported. Enum properties and values are generated automatically.");
         }
 
         

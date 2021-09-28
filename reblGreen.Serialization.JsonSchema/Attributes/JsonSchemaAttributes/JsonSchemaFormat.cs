@@ -10,8 +10,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// be used by the json-schema generator.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaFormat : Attribute
+    public class JsonSchemaFormat : JsonSchemaAttribute
     {
-        public JsonSchemaFormat(JsonSchemaAttribute.StringFormat format) { }
+        public JsonSchemaFormat(JsonSchemaAttribute.StringFormat format)
+        {
+            Format = format;
+        }
     }
 }

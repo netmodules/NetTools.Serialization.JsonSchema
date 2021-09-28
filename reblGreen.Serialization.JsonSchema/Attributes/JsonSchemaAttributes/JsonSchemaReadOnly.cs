@@ -10,8 +10,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// be used by the json-schema generator.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaReadOnly : Attribute
+    public class JsonSchemaReadOnly : JsonSchemaAttribute
     {
-        public JsonSchemaReadOnly() { }
+        public JsonSchemaReadOnly(bool readOnly = true)
+        {
+            ReadOnly = readOnly;
+        }
     }
 }

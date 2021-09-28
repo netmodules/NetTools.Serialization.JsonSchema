@@ -10,19 +10,14 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
     /// properties will be allowed.
     /// </summary>
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class JsonSchemaName : Attribute
     {
-        string Name;
+        public readonly string Name;
         
         public JsonSchemaName(string name)
         {
             Name = name;
-        }
-
-        public string GetName()
-        {
-            return Name;
         }
     }
 }

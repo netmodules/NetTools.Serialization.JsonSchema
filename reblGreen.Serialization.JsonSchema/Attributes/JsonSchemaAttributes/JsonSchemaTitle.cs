@@ -10,8 +10,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// be used by the json-schema generator.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaTitle : Attribute
+    public class JsonSchemaTitle : JsonSchemaAttribute
     {
-        public JsonSchemaTitle(string title) { }
+        public JsonSchemaTitle(string title)
+        {
+            Title = title;
+        }
     }
 }

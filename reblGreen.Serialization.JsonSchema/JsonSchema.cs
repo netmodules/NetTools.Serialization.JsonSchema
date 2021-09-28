@@ -3,6 +3,7 @@ using reblGreen.Serialization.JsonSchemaInterfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace reblGreen.Serialization
@@ -83,37 +84,69 @@ namespace reblGreen.Serialization
         Dictionary<string, object> GetJsonSchemaFromSchemaObject(JsonSchemaObject o, IJsonSchemaObjectParser parser = null)
         {
             var schema = new Dictionary<string, object>();
+
+            if (SchemaUrl != null)
+            {
+                schema.Add("$ref", SchemaUrl.ToString() + o.TypeInfo.FullName);
+            }
+
             PopulateSchemaDictionary(schema, o);
 
-            if (schema.TryGetValue("type", out var type) && type.ToString() == "object" && o.Members != null)
+            if (schema.TryGetValue("type", out var type) && o.Members != null)
             {
-                var properties = new Dictionary<string, object>();
+                var strType = type.ToString();
 
-
-                foreach (var m in o.Members)
+                if (strType == "object" || strType == "unknown")
                 {
-                    if (m.Attribute != null && m.Attribute.Hidden)
+                    schema["type"] = "object";
+                    var properties = new Dictionary<string, object>();
+                    var required = new List<string>();
+
+                    foreach (var m in o.Members)
                     {
-                        continue;
+                        if (m.Attribute != null && m.Attribute.Hidden)
+                        {
+                            continue;
+                        }
+
+                        string name = null;
+
+                        if (CamelCasing)
+                        {
+                            name = char.ToLowerInvariant(m.Name[0]) + (m.Name.Length > 1 ? m.Name.Substring(1) : "");
+                        }
+                        else
+                        {
+                            name = m.Name;
+                        }
+
+                        properties.Add(name, GetJsonSchemaFromSchemaObject(m));
+
+                        if (m.Attribute != null && m.Attribute.Required != null)
+                        {
+                            if (m.Attribute.Required is bool b)
+                            {
+                                required.Add(name);
+                            }
+                        }
                     }
 
-                    string name = null;
-
-                    if (CamelCasing)
+                    if (properties.Count > 0)
                     {
-                        name = char.ToLowerInvariant(m.Name[0]) + m.Name.Substring(1);
-                    }
-                    else
-                    {
-                        name = m.Name;
+                        schema.Add("properties", properties);
                     }
 
-                    properties.Add(name, GetJsonSchemaFromSchemaObject(m));
-                }
-
-                if (properties.Count > 0)
-                {
-                    schema.Add("properties", properties);
+                    if (required.Count > 0)
+                    {
+                        if (schema.TryGetValue("required", out var r) && r is List<string> req)
+                        {
+                            req.AddRange(required);
+                        }
+                        else
+                        {
+                            schema.Add("required", required);
+                        }
+                    }
                 }
             }
 
@@ -140,13 +173,32 @@ namespace reblGreen.Serialization
             {
                 schema.Add("enum", System.Enum.GetNames(o.TypeInfo.AsType()));
             }
-            else if (o.Attribute.TypeOverride.IsEnum)
+            else if (o.Attribute.TypeOverride != null && o.Attribute.TypeOverride.IsEnum)
             {
                 schema.Add("enum", System.Enum.GetNames(o.Attribute.TypeOverride));
             }
             else if (o.Attribute.Type != JsonSchemaAttribute.BasicType.Null)
             {
                 schema.Add("type", o.Attribute.Type.ToString().ToLowerInvariant());
+            }
+
+            if (o.Attribute.Required != null)
+            {
+                if (o.Attribute.Required is string[] arr)
+                {
+                    if (CamelCasing)
+                    {
+                        arr = arr.Select(x => char.ToLowerInvariant(x[0]) + (x.Length > 1 ? x.Substring(1) : "")).ToArray();
+                    }
+                    if (schema.TryGetValue("required", out var required) && required is List<string> r)
+                    {
+                        r.AddRange(arr);
+                    }
+                    else
+                    {
+                        schema.Add("required", new List<string>(arr));
+                    }
+                }
             }
 
             if (o.Attribute.Title != null)
@@ -158,8 +210,25 @@ namespace reblGreen.Serialization
             if (o.Attribute.Default != null)
                 schema.Add("default", o.Attribute.Default.ToString());
 
-            if (o.Attribute.AdditionalItems)
-                schema.Add("additionalItems", true);
+            // By default, additional items and additional properties are allowed in JSON schema unless strictly set to false or another
+            // JSON schema. Currently we only support 
+            if (o.Attribute.AdditionalItems is bool additionalItems && !additionalItems)
+            {
+                schema.Add("additionalItems", false);
+            }
+            else
+            {
+                // Do something in the future with support for setting additionalItems as another JSON schema...
+            }
+
+            if (o.Attribute.AdditionalProperties is bool additionalProperties && !additionalProperties)
+            {
+                schema.Add("additionalProperties", false);
+            }
+            else
+            {
+                // Do something in the future with support for setting additionalProperties as another JSON schema...
+            }
 
             if (o.Attribute.ExclusiveMaximum)
                 schema.Add("exclusiveMaximum", true);

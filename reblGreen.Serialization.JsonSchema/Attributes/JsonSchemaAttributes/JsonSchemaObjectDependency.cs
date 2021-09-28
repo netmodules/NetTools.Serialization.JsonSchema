@@ -16,22 +16,22 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     {
         public JsonSchemaObjectDependency(string key, params string[] keys)
         {
-
+            throw new Exception("JsonSchemaObjectDependency is currently not supported.");
         }
 
         public JsonSchemaObjectDependency(string key, params object[] attributes)
         {
-
+            throw new Exception("JsonSchemaObjectDependency is currently not supported.");
         }
 
         public JsonSchemaObjectDependency(string key, Type type)
         {
-
+            throw new Exception("JsonSchemaObjectDependency is currently not supported.");
         }
 
         public JsonSchemaObjectDependency(string key)
         {
-
+            throw new Exception("JsonSchemaObjectDependency is currently not supported.");
         }
     }
 }

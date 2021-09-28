@@ -10,12 +10,10 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// is an object, where each key is the name of a property and each value is a JSON schema used to validate that property.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public class JsonSchemaPropertyAttribute : JsonSchemaAttribute
+    public class JsonSchemaProperty : Attribute
     {
-        public JsonSchemaPropertyAttribute(string key, params object[] attributes)
-        {
-
-        }
+        public readonly string Key;
+        public readonly Type Value;
 
         /// <summary>
         /// JsonSchemaPropertyAttribute can be added to a type of object multiple times to define properties
@@ -23,9 +21,11 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
         /// </summary>
         /// <param name="key">The name of the property</param>
         /// <param name="value">a reference type to help identify the JSON schema used to validate that property</param>
-        public JsonSchemaPropertyAttribute(string key, Type value)
+        public JsonSchemaProperty(string key, Type value)
         {
-
+            Key = key;
+            Value = value;
+            throw new Exception("JsonSchemaProperty is currently not supported.");
         }
     }
 }

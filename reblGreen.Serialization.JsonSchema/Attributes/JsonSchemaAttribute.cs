@@ -75,6 +75,13 @@ namespace reblGreen.Serialization
         ///// against the enclosing schema. The following is an example for validating street light colors: "enum": ["red", "amber", "green"]
         ///// </summary>
         //public object[] Enum;
+
+        /// <summary>
+        /// Valid on any type: By default, the properties defined by the properties keyword are not required. However, one can provide a list of required properties using the required
+        /// keyword. The required keyword takes an array of zero or more strings. Each of these strings must be unique. If adding this attribute flag on an field rather than at
+        /// class-level, you should use the empty constructor. This will tell JsonSchema to add the field to the Required Properties array when generating the schema.
+        /// </summary>
+        public object Required;
         #endregion
 
 
@@ -142,6 +149,13 @@ namespace reblGreen.Serialization
         #endregion
 
         #region object
+        /// <summary>
+        /// Valid on object: The additionalProperties keyword is used to control the handling of extra stuff, that is, properties whose names are not listed
+        /// in the properties keyword or match any of the regular expressions in the patternProperties keyword. By default any additional properties are
+        /// allowed. The value of the additionalProperties keyword is a schema that will be used to validate any properties in the instance that are not
+        /// matched by properties or patternProperties.Setting the additionalProperties schema to false means no additional properties will be allowed.
+        /// </summary>
+        public bool AdditionalProperties = true;
 
         /// <summary>
         /// Valid on object: The number of properties on an object can be restricted using the minProperties and maxProperties keywords. Each of these
@@ -155,8 +169,10 @@ namespace reblGreen.Serialization
         /// </summary>
         public object MaxProperties;
 
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public Type Property;
         #endregion
 
 
@@ -167,7 +183,7 @@ namespace reblGreen.Serialization
         /// schema. Here, we’ll reuse the example schema above, but set additionalItems to false, which has the effect of disallowing extra
         /// items in the array. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
         /// </summary>
-        public bool AdditionalItems = false;
+        public bool AdditionalItems = true;
 
         /// <summary>
         /// Valid on array: The length of the array can be specified using the minItems and maxItems keywords. The value of each keyword must be a 
@@ -185,6 +201,12 @@ namespace reblGreen.Serialization
         /// Valid on array: A schema can ensure that each of the items in an array is unique. Simply set the uniqueItems keyword to true.
         /// </summary>
         public bool UniqueItems = false;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Type Item;
+
         #endregion
 
 

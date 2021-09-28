@@ -12,6 +12,9 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaNotImplemented : Attribute
     {
-        public JsonSchemaNotImplemented() { }
+        public JsonSchemaNotImplemented()
+        {
+            throw new Exception("JsonSchemaNotImplemented is currently not supported.");
+        }
     }
 }
