@@ -18,9 +18,8 @@ namespace reblGreen.Serialization.TestApplication
     [JsonSchemaRequired("Name"), JsonSchemaAdditionalProperties(false)]
     internal class DummyEvent //: IEvent
     {
-        [JsonName("name")]
-        [JsonSchema(Title = "Event Name")]
-        [JsonSchema(Description = "Enter the event name", MaxLength = 128, MinLength = 10)]
+        [JsonSchemaTitle("Event Name")]
+        [JsonSchemaDescription("Enter the event name")]
         [JsonSchema(TypeOverride = typeof(string))]
         public EventName Name { get; set; }
 

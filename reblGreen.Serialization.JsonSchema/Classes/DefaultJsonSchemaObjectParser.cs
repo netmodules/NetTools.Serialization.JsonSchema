@@ -271,28 +271,29 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             string typeName = string.Empty;
             List<string> generics = new List<string>();
 
-            if (o.PrimitiveType != null)
-            {
-                typeName = "." + o.PrimitiveType.Name.ToString();
+            //if (o.PrimitiveType != null)
+            //{
+            //    typeName = "." + o.PrimitiveType.Name.ToString();
 
-                if (o.PrimitiveType.Children != null)
-                {
-                    foreach (var c in o.PrimitiveType.Children)
-                    {
-                        var generic = c.FullName;
-                        var systemGeneric = generic.IndexOf("System.");
+            //    if (o.PrimitiveType.Children != null)
+            //    {
+            //        foreach (var c in o.PrimitiveType.Children)
+            //        {
+            //            var generic = c.FullName;
+            //            var systemGeneric = generic.IndexOf("System.");
 
-                        if (systemGeneric == 0)
-                        {
-                            generic = generic.Substring(6);
-                            generics.Add(generic);
-                        }
-                    }
-                }
-            }
-            else if (o.Attribute != null && o.Attribute.TypeOverride != null)
+            //            if (systemGeneric == 0)
+            //            {
+            //                generic = generic.Substring(6);
+            //                generics.Add(generic);
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            if (o.Attribute != null && o.Attribute.TypeOverride != null)
             {
-                var t = o.Attribute.TypeOverride;
+                typeName = o.Attribute.TypeOverride.FullName;
             }
             else if (o.TypeInfo.IsGenericType)
             {
@@ -315,6 +316,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 typeName = o.TypeInfo.FullName;
             }
 
+            typeName = typeName.Split('`')[0];
             var system = typeName.IndexOf("System.");
 
             if (system == 0)
@@ -322,7 +324,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 typeName = typeName.Substring(6); 
             }
 
-            return schemaRef + typeName + (generics.Count > 0 ? "+" : "") + string.Join("+", generics) + ".json";
+            return schemaRef + typeName + (generics.Count > 0 ? "+" : "") + string.Join("+", generics.Select(g=>g.Split('`')[0])) + ".json";
         }
     }
 }
