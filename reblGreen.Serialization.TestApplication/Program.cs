@@ -22,7 +22,7 @@ namespace reblGreen.Serialization.TestApplication
             //var stringSchema = jsonSchema.GenerateJsonSchemaFromObject<string>();
             //var stringSchemaString = Json.ToJson(stringSchema).BeautifyJson();
 
-            var dummySchema = jsonSchema.FromType<DummyEvent>();
+            var dummySchema = jsonSchema.FromType<DummyEvent>(10);
             var dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
 
             jsonSchema = new JsonSchema(new JsonSchemaOptions()
@@ -32,7 +32,7 @@ namespace reblGreen.Serialization.TestApplication
                 SchemaType = JsonSchemaOptions.JsonSchemaType.Shallow
             });
 
-            var settingSchema = jsonSchema.FromType<reblGreen.NetCore.Modules.Events.GetSettingEvent>();
+            var settingSchema = jsonSchema.FromType<reblGreen.NetCore.Modules.Events.GetSettingEvent>(10);
             var settingSchemaString = Json.ToJson(settingSchema).BeautifyJson();
 
             Console.WriteLine(dummySchemaString);

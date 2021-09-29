@@ -26,6 +26,8 @@ namespace reblGreen.Serialization.TestApplication
         [JsonName("meta"), JsonIgnore, JsonSchemaRequired]
         public Dictionary<string, object> Meta { get; set; }
 
+        public Dictionary<string, EventName> TestDictionaryOfType { get; set; }
+
         [JsonIgnore]
         public bool Handled { get; }
 

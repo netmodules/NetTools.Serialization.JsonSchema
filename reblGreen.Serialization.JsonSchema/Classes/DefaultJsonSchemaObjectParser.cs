@@ -196,23 +196,39 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 schema.Add("default", o.Attribute.Default.ToString());
 
             // By default, additional items and additional properties are allowed in JSON schema unless strictly set to false or another
-            // JSON schema. Currently we only support 
-            if (o.Attribute.AdditionalItems is bool additionalItems && !additionalItems)
+            // JSON schema.
+            if (o.Attribute.AdditionalItems != null)
             {
-                schema.Add("additionalItems", false);
-            }
-            else
-            {
-                // Do something in the future with support for setting additionalItems as another JSON schema...
+                if (o.Attribute.AdditionalItems is bool additionalItems)
+                {
+                    if (!additionalItems)
+                    {
+                        schema.Add("additionalItems", false);
+                    }
+                }
+                else
+                {
+                    // Do something in the future with support for setting additionalItems as another JSON schema...
+                    var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.AdditionalItems, 5, 0);
+                    schema.Add("additionalItems", GetSchemaDictionaryFromJsonSchemaObject(genericItem, true));
+                }
             }
 
-            if (o.Attribute.AdditionalProperties is bool additionalProperties && !additionalProperties)
+            if (o.Attribute.AdditionalProperties != null)
             {
-                schema.Add("additionalProperties", false);
-            }
-            else
-            {
-                // Do something in the future with support for setting additionalProperties as another JSON schema...
+                if (o.Attribute.AdditionalProperties is bool additionalProperties)
+                {
+                    if (!additionalProperties)
+                    {
+                        schema.Add("additionalProperties", false);
+                    }
+                }
+                else
+                {
+                    // Do something in the future with support for setting additionalProperties as another JSON schema...
+                    var genericProperty = JsonSchemaHelpers.GetSchemaObject(o.Attribute.AdditionalProperties, 5, 0);
+                    schema.Add("additionalProperties", GetSchemaDictionaryFromJsonSchemaObject(genericProperty, true));
+                }
             }
 
             if (o.Attribute.ExclusiveMaximum)
@@ -307,8 +323,9 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                     if (systemGeneric == 0)
                     {
                         generic = generic.Substring(6);
-                        generics.Add(generic);
                     }
+
+                    generics.Add(generic);
                 }
             }
             else

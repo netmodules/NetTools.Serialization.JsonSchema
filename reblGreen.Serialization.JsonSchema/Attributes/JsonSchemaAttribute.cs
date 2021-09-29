@@ -155,7 +155,7 @@ namespace reblGreen.Serialization
         /// allowed. The value of the additionalProperties keyword is a schema that will be used to validate any properties in the instance that are not
         /// matched by properties or patternProperties.Setting the additionalProperties schema to false means no additional properties will be allowed.
         /// </summary>
-        public bool AdditionalProperties = true;
+        public object AdditionalProperties = true;
 
         /// <summary>
         /// Valid on object: The number of properties on an object can be restricted using the minProperties and maxProperties keywords. Each of these
@@ -183,7 +183,7 @@ namespace reblGreen.Serialization
         /// schema. Here, we’ll reuse the example schema above, but set additionalItems to false, which has the effect of disallowing extra
         /// items in the array. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
         /// </summary>
-        public bool AdditionalItems = true;
+        public object AdditionalItems = true;
 
         /// <summary>
         /// Valid on array: The length of the array can be specified using the minItems and maxItems keywords. The value of each keyword must be a 

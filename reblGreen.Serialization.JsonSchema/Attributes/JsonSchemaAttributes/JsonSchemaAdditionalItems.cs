@@ -11,20 +11,20 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// properties will be allowed.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class JsonSchemaAdditionalProperties : JsonSchemaAttribute
+    public class JsonSchemaAdditionalItems : JsonSchemaAttribute
     {
-        public JsonSchemaAdditionalProperties(Type type)
+        public JsonSchemaAdditionalItems(Type type)
         {
-            AdditionalProperties = type;
+            AdditionalItems = type;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="allowed"></param>
-        public JsonSchemaAdditionalProperties(bool allowed)
+        public JsonSchemaAdditionalItems(bool allowed)
         {
-            AdditionalProperties = allowed;
+            AdditionalItems = allowed;
         }
     }
 }

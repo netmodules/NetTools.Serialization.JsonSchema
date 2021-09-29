@@ -8,7 +8,7 @@
     <Description>A .NET Standard 2.0 class library for generating simple JSON Schema objects from .NET Classes. See https://json-schema.org/ for more information regarding JSON Schema.</Description>
     <PackageLicenseUrl>https://opensource.org/licenses/lgpl-license</PackageLicenseUrl>
     <Copyright>reblGreen Software Ltd</Copyright>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Company>reblGreen Software Ltd</Company>
