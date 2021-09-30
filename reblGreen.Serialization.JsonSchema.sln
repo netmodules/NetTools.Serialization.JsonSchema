@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "reblGreen.Serialization.Jso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "reblGreen.Serialization.TestApplication", "reblGreen.Serialization.TestApplication\reblGreen.Serialization.TestApplication.csproj", "{70D4A79B-0AB9-4F02-BB06-809A39E975B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reblGreen.Serialization.JsonSchema.UnitTest", "reblGreen.Serialization.JsonSchema.UnitTest\reblGreen.Serialization.JsonSchema.UnitTest.csproj", "{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

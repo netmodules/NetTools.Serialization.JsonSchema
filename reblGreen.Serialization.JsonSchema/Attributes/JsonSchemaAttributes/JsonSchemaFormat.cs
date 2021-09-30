@@ -12,7 +12,7 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaFormat : JsonSchemaAttribute
     {
-        public JsonSchemaFormat(JsonSchemaAttribute.StringFormat format)
+        public JsonSchemaFormat(StringFormat format)
         {
             Format = format;
         }

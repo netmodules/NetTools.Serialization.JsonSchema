@@ -20,7 +20,7 @@ namespace reblGreen.Serialization.TestApplication
     {
         [JsonSchemaTitle("Event Name")]
         [JsonSchemaDescription("Enter the event name")]
-        [JsonSchema(TypeOverride = typeof(string))]
+        //[JsonSchemaTypeOverride(typeof(string))]
         public EventName Name { get; set; }
 
         [JsonName("meta"), JsonIgnore, JsonSchemaRequired]

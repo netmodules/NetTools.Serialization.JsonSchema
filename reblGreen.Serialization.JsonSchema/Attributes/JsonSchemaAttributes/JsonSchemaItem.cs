@@ -11,6 +11,7 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     /// and additionalItems keywords. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
     /// You must set this attribute on a collection type such as an array or List{T} or it will be ignored.
     /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaItem : JsonSchemaAttribute
     {
         public JsonSchemaItem(Type type)

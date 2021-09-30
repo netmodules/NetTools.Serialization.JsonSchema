@@ -13,7 +13,43 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaMinMaxValue : JsonSchemaAttribute
     {
-        public JsonSchemaMinMaxValue(object min, object max)
+        public JsonSchemaMinMaxValue(int min, int max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(uint min, uint max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(long min, long max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(ulong min, ulong max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(float min, float max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(double min, double max)
+        {
+            Minimum = min;
+            Maximum = max;
+        }
+
+        public JsonSchemaMinMaxValue(decimal min, decimal max)
         {
             Minimum = min;
             Maximum = max;

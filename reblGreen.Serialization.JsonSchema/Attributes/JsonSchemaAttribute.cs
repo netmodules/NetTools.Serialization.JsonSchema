@@ -12,18 +12,18 @@ namespace reblGreen.Serialization
         /// <summary>
         /// Valid on any type: This is a custom schema field added by reblGreen.Serialization.JsonSchemaAttributes which advises the schema creator that the field should be read only.
         /// </summary>
-        public bool ReadOnly = false;
+        public bool ReadOnly { get; internal set; } = false;
 
         /// <summary>
         /// Valid on any type: This is a custom schema field added by reblGreen.Serialization.JsonSchemaAttributes which advises the schema creator that the field should not be visible.
         /// </summary>
-        public bool Hidden = false;
+        public bool Hidden { get; internal set; } = false;
 
         /// <summary>
         /// Valid on any type: This is a custom schema field added by reblGreen.Serialization.JsonSchemaAttributes which helps a schema creator by pointing it to an object type that can be used to
         /// create a schema fragment ($ref).
         /// </summary>
-        public Type TypeOverride = null;
+        public Type TypeOverride { get; internal set; } = null;
         #endregion
 
 
@@ -81,7 +81,7 @@ namespace reblGreen.Serialization
         /// keyword. The required keyword takes an array of zero or more strings. Each of these strings must be unique. If adding this attribute flag on an field rather than at
         /// class-level, you should use the empty constructor. This will tell JsonSchema to add the field to the Required Properties array when generating the schema.
         /// </summary>
-        public object Required;
+        public object Required { get; internal set; }
         #endregion
 
 
@@ -155,7 +155,7 @@ namespace reblGreen.Serialization
         /// allowed. The value of the additionalProperties keyword is a schema that will be used to validate any properties in the instance that are not
         /// matched by properties or patternProperties.Setting the additionalProperties schema to false means no additional properties will be allowed.
         /// </summary>
-        public object AdditionalProperties = true;
+        public object AdditionalProperties { get; internal set; }
 
         /// <summary>
         /// Valid on object: The number of properties on an object can be restricted using the minProperties and maxProperties keywords. Each of these
@@ -183,7 +183,7 @@ namespace reblGreen.Serialization
         /// schema. Here, we’ll reuse the example schema above, but set additionalItems to false, which has the effect of disallowing extra
         /// items in the array. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
         /// </summary>
-        public object AdditionalItems = true;
+        public object AdditionalItems { get; internal set; }
 
         /// <summary>
         /// Valid on array: The length of the array can be specified using the minItems and maxItems keywords. The value of each keyword must be a 
