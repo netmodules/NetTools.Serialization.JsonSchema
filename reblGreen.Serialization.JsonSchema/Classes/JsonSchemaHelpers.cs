@@ -106,7 +106,21 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 type = GetMemberType(memberInfo);
                 name = memberInfo.GetCustomAttributes(typeof(JsonSchemaName), true).Select(x => x as JsonSchemaName).FirstOrDefault();
                 attributes = memberInfo.GetCustomAttributes(typeof(JsonSchemaAttribute), true).Select(x => x as JsonSchemaAttribute).ToList();
+                
+                var typeAttributes = type.GetCustomAttributes(typeof(JsonSchemaAttribute), true).Select(x => x as JsonSchemaAttribute).ToList();
 
+                if (attributes != null)
+                {
+                    if (typeAttributes != null)
+                    {
+                        attributes.AddRange(typeAttributes);
+                    }
+                }
+                else
+                {
+                    attributes = typeAttributes;
+                }
+                
                 if (name != null)
                 {
                     namedObject = name.Name;
