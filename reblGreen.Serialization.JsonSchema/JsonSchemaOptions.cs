@@ -60,6 +60,6 @@ namespace reblGreen.Serialization
         /// provided so that you can change the output schema on fields, properties and types in which you don't have access to
         /// modify the code to support the reblGreen.Serialization.JsonSchema class library.
         /// </summary>
-        public Dictionary<string, JsonSchemaTypeOverride> TypeOverrides;
+        public Dictionary<Type, JsonSchemaAttribute> TypeOverrides;
     }
 }

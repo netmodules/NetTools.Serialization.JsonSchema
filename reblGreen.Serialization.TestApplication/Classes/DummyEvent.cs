@@ -32,5 +32,7 @@ namespace reblGreen.Serialization.TestApplication
         public bool Handled { get; }
 
         public TestEnum TestEnum { get; set; }
+
+        public TestClass TestClass { get; set; }
     }
 }

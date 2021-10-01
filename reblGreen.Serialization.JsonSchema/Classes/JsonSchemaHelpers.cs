@@ -232,7 +232,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             return type.GetGenericArguments();
         }
 
-        static JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
+        internal static JsonSchemaAttribute MergeJsonSchemaAttributes(params JsonSchemaAttribute[] attributes)
         {
             if (attributes == null || attributes.Length == 0)
             {
@@ -248,6 +248,11 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             {
                 var attribute = attributes[0];
                 var other = attributes[i];
+
+                if (attributes[i] == null)
+                {
+                    return attributes[0];
+                }
 
                 // Dirty manual merging time... We merge all attributes into the first attribute in the array and then return it.
 

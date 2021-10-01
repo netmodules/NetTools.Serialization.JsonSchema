@@ -1,4 +1,5 @@
-﻿using System;
+﻿using reblGreen.Serialization.JsonSchemaAttributes;
+using System;
 using System.Collections.Generic;
 
 namespace reblGreen.Serialization.TestApplication
@@ -16,7 +17,8 @@ namespace reblGreen.Serialization.TestApplication
             {
                 AutoCamelCase = true,
                 SchemaRefUrl = new Uri("https://reblgreen.com/json-schema/"),
-                SchemaType = JsonSchemaOptions.JsonSchemaType.Nested
+                SchemaType = JsonSchemaOptions.JsonSchemaType.Nested,
+                 TypeOverrides = new Dictionary<Type, JsonSchemaAttribute> { { typeof(TestClass), new JsonSchemaType(JsonSchemaAttribute.BasicType.String) } }
             });
 
             //var stringSchema = jsonSchema.GenerateJsonSchemaFromObject<string>();
