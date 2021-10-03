@@ -34,5 +34,7 @@ namespace reblGreen.Serialization.TestApplication
         public TestEnum TestEnum { get; set; }
 
         public TestClass TestClass { get; set; }
+
+        public Uri TestUrl { get; set; }
     }
 }
