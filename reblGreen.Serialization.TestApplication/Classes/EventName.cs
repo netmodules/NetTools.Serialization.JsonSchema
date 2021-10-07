@@ -23,6 +23,7 @@
     THE SOFTWARE.
  */
 
+using reblGreen.Serialization.JsonSchemaEnums;
 using reblGreen.Serialization.JsonSchemaAttributes;
 using System;
 
@@ -32,7 +33,7 @@ namespace reblGreen.Serialization.TestApplication
     /// <see cref="EventName"/> This class acts as a simple string wrapper to offer a more self descriptive usage type.
     /// </summary>
     [Serializable]
-    [JsonSchemaType(JsonSchemaAttribute.BasicType.String)]
+    [JsonSchemaType(BasicType.String)]
     public sealed class EventName
     {
         readonly string Value;

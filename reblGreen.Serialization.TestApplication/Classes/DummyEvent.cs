@@ -3,7 +3,7 @@ using reblGreen.Serialization.Attributes;
 using reblGreen.Serialization.JsonSchemaAttributes;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; using reblGreen.Serialization.JsonSchemaAttributes.Internal;
 
 namespace reblGreen.Serialization.TestApplication
 {
@@ -13,8 +13,8 @@ namespace reblGreen.Serialization.TestApplication
     /// identify the concrete object type
     /// </summary>
     [Serializable]
-    [JsonSchema(Title = "Dummy Event",
-        Description = "This is a dummy event")]
+    [JsonSchemaTitle("Dummy Event")]
+    [JsonSchemaDescription("This is a dummy event")]
     [JsonSchemaRequired("Name"), JsonSchemaAdditionalProperties(false)]
     internal class DummyEvent //: IEvent
     {

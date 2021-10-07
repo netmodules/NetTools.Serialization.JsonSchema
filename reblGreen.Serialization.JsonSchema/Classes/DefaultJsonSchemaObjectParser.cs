@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using reblGreen.Serialization.JsonSchemaAttributes.Internal;
+using reblGreen.Serialization.JsonSchemaEnums;
 
 namespace reblGreen.Serialization.JsonSchemaClasses
 {
@@ -170,7 +172,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             {
                 schema.Add("enum", Enum.GetNames(o.Attribute.TypeOverride));
             }
-            else if (o.Attribute.Type != JsonSchemaAttribute.BasicType.Null)
+            else if (o.Attribute.Type != BasicType.Null)
             {
                 schema.Add("type", o.Attribute.Type.ToString().ToLowerInvariant());
             }
@@ -245,7 +247,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             if (o.Attribute.ExclusiveMinimum)
                 schema.Add("exclusiveMinimum", true);
 
-            if (o.Attribute.Format != JsonSchemaAttribute.StringFormat.None)
+            if (o.Attribute.Format != StringFormat.None)
                 schema.Add("format", o.Attribute.Format.ToString().ToLowerInvariant());
 
             if (o.Attribute.Maximum != null)

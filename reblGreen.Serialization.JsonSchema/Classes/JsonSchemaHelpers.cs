@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using reblGreen.Serialization.JsonSchemaAttributes.Internal;
 using reblGreen.Serialization.JsonSchemaAttributes;
 using reblGreen.Serialization.JsonSchemaInterfaces;
+using reblGreen.Serialization.JsonSchemaEnums;
 
 namespace reblGreen.Serialization.JsonSchemaClasses
 {
@@ -262,7 +264,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 attribute.Description = attribute.Description != null ? attribute.Description : other.Description;
                 attribute.ExclusiveMaximum = attribute.ExclusiveMaximum || other.ExclusiveMaximum;
                 attribute.ExclusiveMinimum = attribute.ExclusiveMinimum || other.ExclusiveMinimum;
-                attribute.Format = attribute.Format != JsonSchemaAttribute.StringFormat.None ? attribute.Format : other.Format;
+                attribute.Format = attribute.Format != StringFormat.None ? attribute.Format : other.Format;
                 attribute.Hidden = attribute.Hidden || other.Hidden;
                 attribute.Maximum = attribute.Maximum != null ? attribute.Maximum : other.Maximum;
                 attribute.MaxItems = attribute.MaxItems != null ? attribute.MaxItems : other.MaxItems;
@@ -276,7 +278,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 attribute.Pattern = attribute.Pattern != null ? attribute.Pattern : other.Pattern;
                 attribute.ReadOnly = attribute.ReadOnly || other.ReadOnly;
                 attribute.Title = attribute.Title != null ? attribute.Title : other.Title;
-                attribute.Type = attribute.Type != JsonSchemaAttribute.BasicType.Null && attribute.Type != JsonSchemaAttribute.BasicType.Unknown ? attribute.Type : other.Type;
+                attribute.Type = attribute.Type != BasicType.Null && attribute.Type != BasicType.Unknown ? attribute.Type : other.Type;
                 attribute.TypeOverride = attribute.TypeOverride != null ? attribute.TypeOverride : other.TypeOverride;
                 attribute.UniqueItems = attribute.UniqueItems | other.UniqueItems;
 

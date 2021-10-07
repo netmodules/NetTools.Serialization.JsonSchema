@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+using System.Text; using reblGreen.Serialization.JsonSchemaAttributes.Internal;
 
 namespace reblGreen.Serialization.JsonSchemaClasses
 {

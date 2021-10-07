@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using reblGreen.Serialization.JsonSchemaAttributes.Internal;
+using reblGreen.Serialization.JsonSchemaEnums;
 
 namespace reblGreen.Serialization.JsonSchemaClasses
 {
@@ -19,39 +21,39 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             {
                 // If the type is bool we simply check if json is "true" or "false". If it isn't either then we must assume false since we need to return a non-nullable object.
                 if (type == typeof(string))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.String);
+                    return new PrimitiveType(BasicType.String);
                 if (type == typeof(bool))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Boolean);
+                    return new PrimitiveType(BasicType.Boolean);
                 if (type == typeof(int))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(int.MinValue, int.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(int.MinValue, int.MaxValue));
                 if (type == typeof(uint))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(uint.MinValue, uint.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(uint.MinValue, uint.MaxValue));
                 if (type == typeof(long))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(long.MinValue, long.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(long.MinValue, long.MaxValue));
                 if (type == typeof(ulong))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(ulong.MinValue, ulong.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(ulong.MinValue, ulong.MaxValue));
                 if (type == typeof(short))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(short.MinValue, short.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(short.MinValue, short.MaxValue));
                 if (type == typeof(ushort))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(ushort.MinValue, ushort.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(ushort.MinValue, ushort.MaxValue));
                 if (type == typeof(byte))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(byte.MinValue, byte.MaxValue));
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(byte.MinValue, byte.MaxValue));
                 if (type == typeof(float))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Number, new JsonSchemaMinMaxValue(float.MinValue, float.MaxValue));
+                    return new PrimitiveType(BasicType.Number, new JsonSchemaMinMaxValue(float.MinValue, float.MaxValue));
                 if (type == typeof(double))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Number, new JsonSchemaMinMaxValue(double.MinValue, double.MaxValue));
+                    return new PrimitiveType(BasicType.Number, new JsonSchemaMinMaxValue(double.MinValue, double.MaxValue));
                 if (type == typeof(decimal))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Number, new JsonSchemaMinMaxValue(decimal.MinValue, decimal.MaxValue));
+                    return new PrimitiveType(BasicType.Number, new JsonSchemaMinMaxValue(decimal.MinValue, decimal.MaxValue));
                 if (type == typeof(char))
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.String, new JsonSchemaMinMaxLength(1,1));
+                    return new PrimitiveType(BasicType.String, new JsonSchemaMinMaxLength(1,1));
             }
 
             // Speciall case for IntPtr, is IntPtr a built in type?
             if (type == typeof(IntPtr))
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(int.MinValue, int.MaxValue));
+                return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(int.MinValue, int.MaxValue));
 
             if (type == typeof(UIntPtr))
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Integer, new JsonSchemaMinMaxValue(uint.MinValue, uint.MaxValue));
+                return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(uint.MinValue, uint.MaxValue));
 
             if (typeof(IDictionary).IsAssignableFrom(type))
             {
@@ -59,17 +61,17 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 if (type.IsGenericType)
                 {
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Object, new JsonSchemaAdditionalProperties(genericTypes[1]), genericTypes);
+                    return new PrimitiveType(BasicType.Object, new JsonSchemaAdditionalProperties(genericTypes[1]), genericTypes);
                 }
 
                 var elementType = type.GetElementType();
 
                 if (elementType != null)
                 {
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Object, new JsonSchemaAdditionalItems(elementType));
+                    return new PrimitiveType(BasicType.Object, new JsonSchemaAdditionalItems(elementType));
                 }
 
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Object);
+                return new PrimitiveType(BasicType.Object);
             }
 
             if (typeof(ICollection).IsAssignableFrom(type))
@@ -78,17 +80,17 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 if (type.IsGenericType)
                 {
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Array, new JsonSchemaAdditionalItems(genericTypes[0]), genericTypes);
+                    return new PrimitiveType(BasicType.Array, new JsonSchemaAdditionalItems(genericTypes[0]), genericTypes);
                 }
 
                 var elementType = type.GetElementType();
 
                 if (elementType != null)
                 {
-                    return new PrimitiveType(JsonSchemaAttribute.BasicType.Array, new JsonSchemaAdditionalItems(elementType));
+                    return new PrimitiveType(BasicType.Array, new JsonSchemaAdditionalItems(elementType));
                 }
 
-                return new PrimitiveType(JsonSchemaAttribute.BasicType.Array);
+                return new PrimitiveType(BasicType.Array);
             }
 
             return null;
