@@ -11,7 +11,7 @@ namespace reblGreen.Serialization.JsonSchemaEnums
     public enum StringFormat
     {
         /// <summary>
-        /// The none format is a custom format added by reblGreen.Serialization.JsonSchemaAttributes to allow a default if the attribute field is not set
+        /// The (none) format is a custom format added by reblGreen.Serialization.JsonSchemaAttributes to allow a default if the attribute field is not set
         /// by the declarer.
         /// </summary>
         None = 0,
@@ -28,6 +28,41 @@ namespace reblGreen.Serialization.JsonSchemaEnums
         /// </summary>
         Multiline,
 
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a Base 64 string representation
+        /// of an object. This may allow the formatter to display a file upload system, for example.
+        /// </summary>
+        Base64,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a CSV string representation of
+        /// an object. This may allow the formatter to display a multi string formatter or container to display or input the comma separated values, for example.
+        /// </summary>
+        Csv,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is an XML representation of
+        /// an object. This may allow the formatter to display an XML formatter or validator view, for example.
+        /// </summary>
+        Xml,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is an HTML representation of
+        /// an object. This may allow the formatter to display an HTML formatter or validator view, for example.
+        /// </summary>
+        Html,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a JSON representation of
+        /// an object. This may allow the formatter to display a JSON formatter or validator view, for example.
+        /// </summary>
+        Json,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string represents an HTML Color. This
+        /// may allow the formatter to display a color picker view, for example.
+        /// </summary>
+        Color,
 
         /// <summary>
         /// Built-in: Date representation, as defined by <see href="http://tools.ietf.org/html/rfc3339"/> RFC 3339, section 5.6.
