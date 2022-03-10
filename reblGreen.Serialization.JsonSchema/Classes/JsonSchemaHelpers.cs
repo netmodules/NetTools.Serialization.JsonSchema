@@ -258,6 +258,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 // Dirty manual merging time... We merge all attributes into the first attribute in the array and then return it.
 
+                attribute.Items = attribute.Items != null ? attribute.Items : other.Items;
                 attribute.AdditionalItems = attribute.AdditionalItems != null ? attribute.AdditionalItems : other.AdditionalItems;
                 attribute.AdditionalProperties = attribute.AdditionalProperties != null ? attribute.AdditionalProperties : other.AdditionalProperties;
                 attribute.Default = attribute.Default != null ? attribute.Default : other.Default;

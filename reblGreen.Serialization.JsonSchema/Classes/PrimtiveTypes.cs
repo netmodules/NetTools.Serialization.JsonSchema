@@ -80,14 +80,14 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                 if (type.IsGenericType)
                 {
-                    return new PrimitiveType(BasicType.Array, new JsonSchemaAdditionalItems(genericTypes[0]), genericTypes);
+                    return new PrimitiveType(BasicType.Array, new JsonSchemaItems(genericTypes[0]), genericTypes);
                 }
 
                 var elementType = type.GetElementType();
 
                 if (elementType != null)
                 {
-                    return new PrimitiveType(BasicType.Array, new JsonSchemaAdditionalItems(elementType));
+                    return new PrimitiveType(BasicType.Array, new JsonSchemaItems(elementType));
                 }
 
                 return new PrimitiveType(BasicType.Array);

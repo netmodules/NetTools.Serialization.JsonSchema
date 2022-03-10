@@ -28,6 +28,8 @@ namespace reblGreen.Serialization.TestApplication
 
         public Dictionary<string, EventName> TestDictionaryOfType { get; set; }
 
+        public List<string> TestArrayOfStrings { get; set; }
+
         [JsonIgnore]
         public bool Handled { get; }
 

@@ -205,6 +205,13 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             if (o.Attribute.Default != null)
                 schema.Add("default", o.Attribute.Default.ToString());
 
+            if (o.Attribute.Items != null)
+            {
+                // Do something in the future with support for setting additionalItems as another JSON schema...
+                var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.Items, 5, 0);
+                schema.Add("items", GetSchemaDictionaryFromJsonSchemaObject(genericItem, true));
+            }
+
             // By default, additional items and additional properties are allowed in JSON schema unless strictly set to false or another
             // JSON schema.
             if (o.Attribute.AdditionalItems != null)

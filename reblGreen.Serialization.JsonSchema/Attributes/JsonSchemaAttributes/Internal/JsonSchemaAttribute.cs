@@ -199,6 +199,12 @@ namespace reblGreen.Serialization.JsonSchemaAttributes.Internal
         #region array
 
         /// <summary>
+        /// Valid on array: The items keyword defines what is a valid item in the array.
+        /// When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
+        /// </summary>
+        public object Items { get; internal set; }
+
+        /// <summary>
         /// Valid on array: The additionalItems keyword controls whether it’s valid to have additional items in the array beyond what is defined in the
         /// schema. Here, we’ll reuse the example schema above, but set additionalItems to false, which has the effect of disallowing extra
         /// items in the array. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
