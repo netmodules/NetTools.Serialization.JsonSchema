@@ -35,6 +35,12 @@ namespace reblGreen.Serialization.JsonSchemaEnums
         Base64,
 
         /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a Base 64 string representation
+        /// of a PNG image. This may allow the formatter to display a render of the png image instead of the string, for example.
+        /// </summary>
+        PngImageBase64,
+
+        /// <summary>
         /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a CSV string representation of
         /// an object. This may allow the formatter to display a multi string formatter or container to display or input the comma separated values, for example.
         /// </summary>
@@ -57,6 +63,12 @@ namespace reblGreen.Serialization.JsonSchemaEnums
         /// an object. This may allow the formatter to display a JSON formatter or validator view, for example.
         /// </summary>
         Json,
+
+        /// <summary>
+        /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string is a rich text string representation of
+        /// an object. This may allow the formatter to display a rich text formatter or editor to display or input the string value, for example.
+        /// </summary>
+        RichText,
 
         /// <summary>
         /// Custom format added by reblGreen.Serialization.JsonSchemaAttributes: This tells the formatter that this string represents an HTML Color. This
