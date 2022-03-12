@@ -28,11 +28,13 @@ namespace reblGreen.Serialization.TestApplication
 
         public Dictionary<string, EventName> TestDictionaryOfType { get; set; }
 
+        [JsonSchemaRequired]
         public List<string> TestArrayOfStrings { get; set; }
 
         [JsonIgnore]
         public bool Handled { get; }
 
+        [JsonSchemaReadOnly]
         public TestEnum TestEnum { get; set; }
 
         public TestClass TestClass { get; set; }
