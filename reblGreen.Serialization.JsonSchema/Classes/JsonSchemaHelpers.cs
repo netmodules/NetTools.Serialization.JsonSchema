@@ -262,7 +262,9 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 attribute.AdditionalItems = attribute.AdditionalItems != null ? attribute.AdditionalItems : other.AdditionalItems;
                 attribute.AdditionalProperties = attribute.AdditionalProperties != null ? attribute.AdditionalProperties : other.AdditionalProperties;
                 attribute.Default = attribute.Default != null ? attribute.Default : other.Default;
-                attribute.Description = attribute.Description != null ? attribute.Description : other.Description;
+                
+                // Reverse description...
+                attribute.Description = other.Description != null ? other.Description : attribute.Description;
                 attribute.ExclusiveMaximum = attribute.ExclusiveMaximum || other.ExclusiveMaximum;
                 attribute.ExclusiveMinimum = attribute.ExclusiveMinimum || other.ExclusiveMinimum;
                 attribute.Format = attribute.Format != StringFormat.None ? attribute.Format : other.Format;
@@ -278,7 +280,10 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                 attribute.MultipleOf = attribute.MultipleOf != null ? attribute.MultipleOf : other.MultipleOf;
                 attribute.Pattern = attribute.Pattern != null ? attribute.Pattern : other.Pattern;
                 attribute.ReadOnly = attribute.ReadOnly || other.ReadOnly;
-                attribute.Title = attribute.Title != null ? attribute.Title : other.Title;
+                
+                // Reverse title...
+                attribute.Title = other.Title != null ? other.Title : attribute.Title;
+
                 attribute.Type = attribute.Type != BasicType.Null && attribute.Type != BasicType.Unknown ? attribute.Type : other.Type;
                 attribute.TypeOverride = attribute.TypeOverride != null ? attribute.TypeOverride : other.TypeOverride;
                 attribute.UniqueItems = attribute.UniqueItems | other.UniqueItems;

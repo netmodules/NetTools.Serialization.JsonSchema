@@ -29,7 +29,11 @@ namespace reblGreen.Serialization.TestApplication
                             new JsonSchemaMinMaxLength(0, 20)
                         )
                     },
-                    { typeof(TimeSpan), new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String), new JsonSchemaFormat(StringFormat.Duration)) }
+                    {
+                        typeof(TimeSpan),
+                        new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String),
+                        new JsonSchemaFormat(StringFormat.Duration))
+                    }
                 }
             });
 
