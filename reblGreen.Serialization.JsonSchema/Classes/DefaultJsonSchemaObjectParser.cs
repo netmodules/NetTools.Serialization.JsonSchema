@@ -152,7 +152,18 @@ namespace reblGreen.Serialization.JsonSchemaClasses
         {
             if (o.TypeInfo.IsEnum && o.PrimitiveType == null && o.Attribute == null)
             {
-                schema.Add("enum", Enum.GetNames(o.TypeInfo.AsType()));
+                var names = Enum.GetNames(o.TypeInfo.AsType());
+
+                if (Options.AutoCamelCase)
+                {
+                    schema.Add("enum", names.Select(n => char.ToLowerInvariant(n[0])
+                    + (n.Length > 1 ? n.Substring(1) : "")).ToArray());
+                }
+                else
+                {
+                    schema.Add("enum", names);
+                }
+
                 return;
             }
             else if (o.PrimitiveType != null)
@@ -166,11 +177,31 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             }
             else if (o.TypeInfo.IsEnum && o.Attribute.TypeOverride == null)
             {
-                schema.Add("enum", Enum.GetNames(o.TypeInfo.AsType()));
+                var names = Enum.GetNames(o.TypeInfo.AsType());
+
+                if (Options.AutoCamelCase)
+                {
+                    schema.Add("enum", names.Select(n => char.ToLowerInvariant(n[0])
+                    + (n.Length > 1 ? n.Substring(1) : "")).ToArray());
+                }
+                else
+                {
+                    schema.Add("enum", names);
+                }
             }
             else if (o.Attribute.TypeOverride != null && o.Attribute.TypeOverride.IsEnum)
             {
-                schema.Add("enum", Enum.GetNames(o.Attribute.TypeOverride));
+                var names = Enum.GetNames(o.Attribute.TypeOverride);
+
+                if (Options.AutoCamelCase)
+                {
+                    schema.Add("enum", names.Select(n => char.ToLowerInvariant(n[0])
+                    + (n.Length > 1 ? n.Substring(1) : "")).ToArray());
+                }
+                else
+                {
+                    schema.Add("enum", names);
+                }
             }
             else if (o.Attribute.Type != BasicType.Null)
             {

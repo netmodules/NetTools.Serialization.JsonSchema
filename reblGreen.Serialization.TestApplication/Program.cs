@@ -57,6 +57,9 @@ namespace reblGreen.Serialization.TestApplication
             var openNlpSchema = jsonSchema.FromType<Modules.Nlp.OpenNlp.Events.DateTimeParserEvent>(10);
             var openNlpSchemaString = Json.ToJson(openNlpSchema).BeautifyJson();
 
+            dummySchema = jsonSchema.FromType<DummyEvent>(10);
+            dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
+
             Console.WriteLine(dummySchemaString);
         }
     }
