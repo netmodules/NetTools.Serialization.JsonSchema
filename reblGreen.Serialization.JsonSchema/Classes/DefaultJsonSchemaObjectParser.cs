@@ -106,14 +106,28 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
                         if (Options.SchemaType == JsonSchemaOptions.JsonSchemaType.Nested)
                         {
-                            properties.Add(name, GetSchemaDictionaryFromJsonSchemaObject(m, true));
+                            if (properties.ContainsKey(name))
+                            {
+                                properties[name] = GetSchemaDictionaryFromJsonSchemaObject(m, true);
+                            }
+                            else
+                            {
+                                properties.Add(name, GetSchemaDictionaryFromJsonSchemaObject(m, true));
+                            }
                         }
                         else
                         {
                             if (Options.SchemaRefUrl != null)
                             {
                                 var subSchemaRef = new Dictionary<string, object>() { { "$ref", GetPrettySchemaRefString(m) } };
-                                properties.Add(name, subSchemaRef);
+                                if (properties.ContainsKey(name))
+                                {
+                                    properties[name] = subSchemaRef;
+                                }
+                                else
+                                {
+                                    properties.Add(name, subSchemaRef);
+                                }
                             }
                         }
 

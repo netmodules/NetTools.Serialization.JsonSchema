@@ -9,8 +9,9 @@
 
   <ItemGroup>
 	<PackageReference Include="reblGreen.Serialization.Json" Version="1.1.4" />
-    <PackageReference Include="reblGreen.NetCore.Modules" Version="1.2.6" />
-	<PackageReference Include="Modules.Nlp.OpenNlp.Events" Version="1.2.6.1" />
+    <PackageReference Include="reblGreen.NetCore.Modules" Version="1.2.7" />
+	<!--<PackageReference Include="Modules.Nlp.OpenNlp.Events" Version="1.2.7" />-->
+	<PackageReference Include="Modules.Web.GoogleSearch.Events" Version="1.2.7.24" />
   </ItemGroup>
 
   <ItemGroup>

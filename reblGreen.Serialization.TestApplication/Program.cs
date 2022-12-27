@@ -54,12 +54,14 @@ namespace reblGreen.Serialization.TestApplication
             var settingSchema = jsonSchema.FromType<reblGreen.NetCore.Modules.Events.GetSettingEvent>(10);
             var settingSchemaString = Json.ToJson(settingSchema).BeautifyJson();
 
-            var openNlpSchema = jsonSchema.FromType<Modules.Nlp.OpenNlp.Events.DateTimeParserEvent>(10);
-            var openNlpSchemaString = Json.ToJson(openNlpSchema).BeautifyJson();
+            //var openNlpSchema = jsonSchema.FromType<Modules.Nlp.OpenNlp.Events.DateTimeParserEvent>(10);
+            //var openNlpSchemaString = Json.ToJson(openNlpSchema).BeautifyJson();
 
             dummySchema = jsonSchema.FromType<DummyEvent>(10);
             dummySchemaString = Json.ToJson(dummySchema).BeautifyJson();
 
+            var googleSchema = jsonSchema.FromType<Modules.Web.GoogleSearch.Events.GoogleSearchLocalMapsEvent>(10);
+            var googleString = googleSchema.ToJson().BeautifyJson();
             Console.WriteLine(dummySchemaString);
         }
     }
