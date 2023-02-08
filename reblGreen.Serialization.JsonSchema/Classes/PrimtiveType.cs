@@ -38,5 +38,11 @@ namespace reblGreen.Serialization.JsonSchemaClasses
         {
             return Name.ToString().ToLowerInvariant();
         }
+
+
+        public override string ToString()
+        {
+            return Name.ToString();
+        }
     }
 }

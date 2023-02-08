@@ -59,14 +59,14 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             {
                 var genericTypes = JsonSchemaHelpers.BaseGenericTypes(type);
 
-                if (type.IsGenericType)
+                if (type.IsGenericType && genericTypes.Length > 1 && genericTypes[1] != typeof(object))
                 {
                     return new PrimitiveType(BasicType.Object, new JsonSchemaAdditionalProperties(genericTypes[1]), genericTypes);
                 }
 
                 var elementType = type.GetElementType();
 
-                if (elementType != null)
+                if (elementType != null && elementType != typeof(object))
                 {
                     return new PrimitiveType(BasicType.Object, new JsonSchemaAdditionalItems(elementType));
                 }
@@ -78,19 +78,24 @@ namespace reblGreen.Serialization.JsonSchemaClasses
             {
                 var genericTypes = JsonSchemaHelpers.BaseGenericTypes(type);
 
-                if (type.IsGenericType)
+                if (type.IsGenericType && genericTypes.Length > 0 && genericTypes[0] != typeof(object))
                 {
                     return new PrimitiveType(BasicType.Array, new JsonSchemaItems(genericTypes[0]), genericTypes);
                 }
 
                 var elementType = type.GetElementType();
 
-                if (elementType != null)
+                if (elementType != null && elementType != typeof(object))
                 {
                     return new PrimitiveType(BasicType.Array, new JsonSchemaItems(elementType));
                 }
 
                 return new PrimitiveType(BasicType.Array);
+            }
+
+            if (type == typeof(object))
+            {
+                return new PrimitiveType(BasicType.Any);
             }
 
             return null;

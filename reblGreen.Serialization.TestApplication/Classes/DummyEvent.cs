@@ -31,6 +31,8 @@ namespace reblGreen.Serialization.TestApplication
         [JsonSchemaRequired]
         public List<string> TestArrayOfStrings { get; set; }
 
+        public List<object> TestArrayOfPrimitiveObject { get; set; }
+
         [JsonIgnore]
         public bool Handled { get; }
 
