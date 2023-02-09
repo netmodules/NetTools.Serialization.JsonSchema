@@ -48,7 +48,31 @@ namespace reblGreen.Serialization.TestApplication
             {
                 AutoCamelCase = true,
                 SchemaRefUrl = new Uri("https://reblgreen.com/json-schema/"),
-                SchemaType = JsonSchemaOptions.JsonSchemaType.Nested
+                SchemaType = JsonSchemaOptions.JsonSchemaType.Nested,
+                TypeOverrides = new Dictionary<Type, JsonSchemaAttribute> {
+                    {
+                        typeof(TestClass),
+                        new JsonSchemaAttributeGroup(
+                            new JsonSchemaType(BasicType.String),
+                            new JsonSchemaMinMaxLength(0, 20)
+                        )
+                    },
+                    {
+                        typeof(TimeSpan),
+                        new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String),
+                        new JsonSchemaFormat(StringFormat.Duration))
+                    },
+                    {
+                        typeof(DateTime),
+                        new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String),
+                        new JsonSchemaFormat(StringFormat.DateTime))
+                    },
+                    {
+                        typeof(Uri),
+                        new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String),
+                        new JsonSchemaFormat(StringFormat.Uri))
+                    }
+                }
             });
 
             var settingSchema = jsonSchema.FromType<reblGreen.NetCore.Modules.Events.GetSettingEvent>(10);

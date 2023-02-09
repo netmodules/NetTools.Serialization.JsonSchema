@@ -18,5 +18,10 @@ namespace reblGreen.Serialization.JsonSchemaAttributes
         {
             Items = type;
         }
+
+        public JsonSchemaItems()
+        {
+            Items = "any";
+        }
     }
 }

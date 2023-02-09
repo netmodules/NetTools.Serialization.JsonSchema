@@ -90,7 +90,7 @@ namespace reblGreen.Serialization.JsonSchemaClasses
                     return new PrimitiveType(BasicType.Array, new JsonSchemaItems(elementType));
                 }
 
-                return new PrimitiveType(BasicType.Array);
+                return new PrimitiveType(BasicType.Array, new JsonSchemaItems());
             }
 
             if (type == typeof(object))

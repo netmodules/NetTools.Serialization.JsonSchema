@@ -252,9 +252,23 @@ namespace reblGreen.Serialization.JsonSchemaClasses
 
             if (o.Attribute.Items != null)
             {
-                // Do something in the future with support for setting additionalItems as another JSON schema...
-                var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.Items, 5, 0);
-                schema.Add("items", GetSchemaDictionaryFromJsonSchemaObject(genericItem, true));
+                if (o.Attribute.Items is string items && items == "any")
+                {
+                    if (Options.UseAnyTypeArray)
+                    {
+                        schema.Add("items", new Dictionary<string, object> { { "type", new List<string> { "number", "string", "boolean", "object", "array", "null" } } });
+                    }
+                    else
+                    {
+                        schema.Add("items", new Dictionary<string, object> { { "type", "any" } });
+                    }
+                }
+                else
+                {
+                    // Do something in the future with support for setting additionalItems as another JSON schema...
+                    var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.Items, 5, 0);
+                    schema.Add("items", GetSchemaDictionaryFromJsonSchemaObject(genericItem, true));
+                }
             }
 
             // By default, additional items and additional properties are allowed in JSON schema unless strictly set to false or another

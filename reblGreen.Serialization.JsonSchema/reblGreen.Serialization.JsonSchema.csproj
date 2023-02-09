@@ -11,6 +11,6 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Company>reblGreen Software Ltd</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
   </PropertyGroup>
 </Project>
