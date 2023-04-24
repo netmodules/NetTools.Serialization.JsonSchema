@@ -30,17 +30,22 @@ namespace NetTools.Serialization.JsonSchemaAttributes.Internal
 
         #region custom keywords
         /// <summary>
-        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes which advises the schema creator that the field should be read only.
+        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes that advises the schema creator to use a specific naming convention for the value names that apply to a JSON Schema property.
+        /// </summary>
+        public NamingConvention ValueNamingConvention { get; set; }
+
+        /// <summary>
+        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes that advises the schema creator that the field should be read only.
         /// </summary>
         public bool ReadOnly { get; internal set; } = false;
 
         /// <summary>
-        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes which advises the schema creator that the field should not be visible.
+        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes that advises the schema creator that the field should not be visible.
         /// </summary>
         public bool Hidden { get; internal set; } = false;
 
         /// <summary>
-        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes which helps a schema creator by pointing it to an object type that can be used to
+        /// Valid on any type: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes that helps a schema creator by pointing it to an object type that can be used to
         /// create a schema fragment ($ref).
         /// </summary>
         public Type TypeOverride { get; internal set; } = null;

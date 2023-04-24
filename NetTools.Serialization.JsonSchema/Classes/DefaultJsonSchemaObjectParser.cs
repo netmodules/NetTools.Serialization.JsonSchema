@@ -193,7 +193,15 @@ namespace NetTools.Serialization.JsonSchemaClasses
             {
                 var names = Enum.GetNames(o.TypeInfo.AsType());
 
-                if (Options.AutoCamelCase)
+                if (o.Attribute.ValueNamingConvention == NamingConvention.Uppercase)
+                {
+                    schema.Add("enum", names.Select(n => n.ToUpperInvariant()).ToArray());
+                }
+                else if (o.Attribute.ValueNamingConvention == NamingConvention.Lowercase)
+                {
+                    schema.Add("enum", names.Select(n => n.ToLowerInvariant()).ToArray());
+                }
+                else if (o.Attribute.ValueNamingConvention == NamingConvention.Automatic && Options.AutoCamelCase)
                 {
                     schema.Add("enum", names.Select(n => char.ToLowerInvariant(n[0])
                     + (n.Length > 1 ? n.Substring(1) : "")).ToArray());
@@ -207,7 +215,15 @@ namespace NetTools.Serialization.JsonSchemaClasses
             {
                 var names = Enum.GetNames(o.Attribute.TypeOverride);
 
-                if (Options.AutoCamelCase)
+                if (o.Attribute.ValueNamingConvention == NamingConvention.Uppercase)
+                {
+                    schema.Add("enum", names.Select(n => n.ToUpperInvariant()).ToArray());
+                }
+                else if (o.Attribute.ValueNamingConvention == NamingConvention.Lowercase)
+                {
+                    schema.Add("enum", names.Select(n => n.ToLowerInvariant()).ToArray());
+                }
+                else if (o.Attribute.ValueNamingConvention == NamingConvention.Automatic && Options.AutoCamelCase)
                 {
                     schema.Add("enum", names.Select(n => char.ToLowerInvariant(n[0])
                     + (n.Length > 1 ? n.Substring(1) : "")).ToArray());
