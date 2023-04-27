@@ -309,6 +309,10 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 {
                     attribute.Required = other.Required;
                 }
+
+                attribute.ValueNamingConvention = attribute.ValueNamingConvention > other.ValueNamingConvention
+                    ? attribute.ValueNamingConvention
+                    : other.ValueNamingConvention;
             }
 
             return attributes[0];

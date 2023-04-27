@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NetTools.Serialization.JsonSchemaAttributes.Internal;
 using NetTools.Serialization.JsonSchemaEnums;
+using System.Reflection;
 
 namespace NetTools.Serialization.JsonSchemaClasses
 {
@@ -164,9 +165,25 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
         void PopulateSchemaDictionary(Dictionary<string, object> schema, JsonSchemaObject o)
         {
+            var isNullable = false;
+            var nullable = Nullable.GetUnderlyingType(o.TypeInfo.AsType());
+
+            if (nullable != null)
+            {
+                isNullable = true;
+                o.TypeInfo = nullable.GetTypeInfo();
+            }
+
             if (o.TypeInfo.IsEnum && o.PrimitiveType == null && o.Attribute == null)
             {
                 var names = Enum.GetNames(o.TypeInfo.AsType());
+
+                if (isNullable)
+                {
+                    var nameList = names.ToList();
+                    nameList.Insert(0, null);
+                    names = nameList.ToArray();
+                }
 
                 if (Options.AutoCamelCase)
                 {
@@ -193,6 +210,13 @@ namespace NetTools.Serialization.JsonSchemaClasses
             {
                 var names = Enum.GetNames(o.TypeInfo.AsType());
 
+                if (isNullable)
+                {
+                    var nameList = names.ToList();
+                    nameList.Insert(0, null);
+                    names = nameList.ToArray();
+                }
+
                 if (o.Attribute.ValueNamingConvention == NamingConvention.Uppercase)
                 {
                     schema.Add("enum", names.Select(n => n.ToUpperInvariant()).ToArray());
@@ -214,6 +238,13 @@ namespace NetTools.Serialization.JsonSchemaClasses
             else if (o.Attribute.TypeOverride != null && o.Attribute.TypeOverride.IsEnum)
             {
                 var names = Enum.GetNames(o.Attribute.TypeOverride);
+
+                if (isNullable)
+                {
+                    var nameList = names.ToList();
+                    nameList.Insert(0, null);
+                    names = nameList.ToArray();
+                }
 
                 if (o.Attribute.ValueNamingConvention == NamingConvention.Uppercase)
                 {

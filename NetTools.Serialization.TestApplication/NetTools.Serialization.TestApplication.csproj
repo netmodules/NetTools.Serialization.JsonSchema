@@ -8,10 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="NetTools.Serialization.Json" Version="1.1.14" />
+	<PackageReference Include="NetTools.Serialization.Json" Version="1.1.17" />
     <PackageReference Include="NetModules" Version="1.2.8" />
 	<!--<PackageReference Include="Modules.Nlp.OpenNlp.Events" Version="1.2.7" />-->
-	<PackageReference Include="Modules.Web.GoogleSearch.Events" Version="1.2.7.24" />
+	<PackageReference Include="Modules.Web.GoogleSearch.Events" Version="1.2.8" />
+	<PackageReference Include="Modules.Web.BingSearch.Events" Version="1.2.8.3" />
   </ItemGroup>
 
   <ItemGroup>

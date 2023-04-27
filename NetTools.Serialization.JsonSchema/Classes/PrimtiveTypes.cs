@@ -12,6 +12,14 @@ namespace NetTools.Serialization.JsonSchemaClasses
     {
         internal static PrimitiveType GetPrimitiveType(Type type)
         {
+            // If the type is nullable we need to get the underlying type and iterate with it instead...
+            var nullable = Nullable.GetUnderlyingType(type);
+
+            if (nullable != null)
+            {
+                type = nullable;
+            }
+
             /*
              * The value of this keyword MUST be either a string or an array. If it is an array, elements of the array MUST be strings and MUST be unique.
              * String values MUST be one of the six primitive types ("null", "boolean", "object", "array", "number", or "string"), or "integer" which matches any number with a zero fractional part.

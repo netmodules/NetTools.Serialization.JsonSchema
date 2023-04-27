@@ -87,6 +87,10 @@ namespace NetTools.Serialization.TestApplication
             var googleSchema = jsonSchema.FromType<Modules.Web.GoogleSearch.Events.GoogleSearchLocalMapsEvent>(10);
             var googleString = googleSchema.ToJson().BeautifyJson();
             Console.WriteLine(dummySchemaString);
+
+            var bingSchema = jsonSchema.FromType<Modules.Web.BingSearch.Events.BingSearchOrganicEvent>(10);
+            
+
         }
     }
 }
