@@ -12,7 +12,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
 {
     internal static class JsonSchemaValidation
     {
-        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, string name = "property")
+        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false, string name = "property")
         {
             details = new List<string>();
             
@@ -59,7 +59,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                             return false;
                         }
 
-                        if (!ValidateField(propertyValue, propertyDic, validators, out details, property.Key))
+                        if (!ValidateField(propertyValue, propertyDic, validators, out details, ignoreEnumCase, ignoreEnumSpaces, property.Key))
                         {
                             return false;
                         }
@@ -86,8 +86,47 @@ namespace NetTools.Serialization.JsonSchemaClasses
             {
                 return false;
             }
-                
+
+            // Enums currently only supports .NET string named enums and NetTools.Serialization.JsonSchema generates a string[] array
+            //
+            var jsEnum = schema.GetDictionaryValueRecursive<ICollection>(null, "enum");
+
+            if (jsEnum != null && !ValidateEnum(name, obj, jsEnum, out details, ignoreEnumCase, ignoreEnumSpaces))
+            {
+                return false;
+            }
+
             return true;
+        }
+
+        private static bool ValidateEnum(string name, object obj, ICollection jsEnum, out List<string> details, bool ignoreStringCase = false, bool ignoreStringSpaces = false)
+        {
+            details = new List<string>();
+
+            if (obj == null || jsEnum == null)
+            {
+                return true;
+            }
+
+            if (ignoreStringSpaces && obj is string str)
+            {
+                obj = str.Replace(" ", "").Replace(".", "");
+            }
+
+            foreach (var e in jsEnum)
+            {
+                if (ignoreStringCase && e is string item && item.Equals(obj.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                else if (e.Equals(obj))
+                {
+                    return true;
+                }
+            }
+
+            details.Add($"{name} must be equal to one of the following enum values: {string.Join(", ", jsEnum)}.");
+            return false;
         }
 
         /// <summary>
@@ -366,11 +405,18 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     return false;
                 }
 
-                if (schema.TryGetValue("exclusiveMinimum", out var exMinObj)
-                    && exMinObj != null && decimal.TryParse(exMinObj.ToString(), out min) && numVal <= min)
+                if (schema.TryGetValue("exclusiveMinimum", out var exMinObj) && exMinObj != null)
                 {
-                    details.Add($"{name} must be greater than {min}.");
-                    return false;
+                    if (decimal.TryParse(exMinObj.ToString(), out min) && numVal <= min)
+                    {
+                        details.Add($"{name} must be greater than {min}.");
+                        return false;
+                    }
+                    else if (bool.TryParse(exMinObj.ToString(), out var exBool) && exBool && numVal <= min)
+                    {
+                        details.Add($"{name} must be greater than {min}.");
+                        return false;
+                    }
                 }
 
                 if (schema.TryGetValue("maximum", out var maxObj)
@@ -380,11 +426,18 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     return false;
                 }
 
-                if (schema.TryGetValue("exclusiveMaximum", out var exMaxObj)
-                    && exMaxObj != null && decimal.TryParse(exMaxObj.ToString(), out max) && numVal >= max)
+                if (schema.TryGetValue("exclusiveMaximum", out var exMaxObj) && exMaxObj != null)
                 {
-                    details.Add($"{name} must be less than {max}.");
-                    return false;
+                    if (decimal.TryParse(exMaxObj.ToString(), out max) && numVal >= max)
+                    {
+                        details.Add($"{name} must be less than {max}.");
+                        return false;
+                    }
+                    else if (bool.TryParse(exMaxObj.ToString(), out var exBool) && exBool && numVal >= min)
+                    {
+                        details.Add($"{name} must be less than {max}.");
+                        return false;
+                    }
                 }
 
                 if (schema.TryGetValue("multipleOf", out var multipleObj)

@@ -104,9 +104,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(IDictionary<string, object> obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(IDictionary<string, object> obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -117,9 +117,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(IList<object> obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(IList<object> obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -130,9 +130,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(object[] obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(object[] obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -143,9 +143,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(bool obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(bool obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -156,9 +156,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(int obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(int obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -169,9 +169,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(double obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(double obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
 
 
@@ -182,9 +182,9 @@ namespace NetTools.Serialization
         /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
         /// invalid.
         /// </summary>
-        public bool ValidateSchema(string obj, Dictionary<string, object> schema, out List<string> details)
+        public bool ValidateSchema(string obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
         }
     }
 }
