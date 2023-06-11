@@ -50,13 +50,13 @@ namespace NetTools.Serialization.TestApplication
                 SchemaRefUrl = new Uri("https://NetTools.com/json-schema/"),
                 SchemaType = JsonSchemaOptions.JsonSchemaType.Nested,
                 TypeOverrides = new Dictionary<Type, JsonSchemaAttribute> {
-                    {
-                        typeof(TestClass),
-                        new JsonSchemaAttributeGroup(
-                            new JsonSchemaType(BasicType.String),
-                            new JsonSchemaMinMaxLength(0, 20)
-                        )
-                    },
+                    //{
+                    //    typeof(TestClass),
+                    //    new JsonSchemaAttributeGroup(
+                    //        new JsonSchemaType(BasicType.String),
+                    //        new JsonSchemaMinMaxLength(0, 20)
+                    //    )
+                    //},
                     {
                         typeof(TimeSpan),
                         new JsonSchemaAttributeGroup(new JsonSchemaType(BasicType.String),
@@ -89,8 +89,45 @@ namespace NetTools.Serialization.TestApplication
             Console.WriteLine(dummySchemaString);
 
             var bingSchema = jsonSchema.FromType<Modules.Web.BingSearch.Events.BingSearchOrganicEvent>(10);
-            
 
+
+            var dummyEvent = new DummyEvent()
+            {
+                // Required
+                Meta = new Dictionary<string, object>(),
+            };
+
+            // Should be false as required fields aren't present...
+            var validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out var details);
+
+            // Required minimum of 1 item...
+            dummyEvent.TestArrayOfStrings = new List<string>()
+            {
+                "Hello World!"
+            };
+
+            // Should be false as required fields are present but testInt1 is less than the minimum value of 1...
+            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
+
+            dummyEvent.TestInt1 = 1;
+
+            // Should be false as required fields are present but testInt2 is less than the minimum value of 1000...
+            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
+
+            dummyEvent.TestInt2 = 1000;
+
+            // Should be valid...
+            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
+
+            dummyEvent.TestString = "d";
+
+            // Should be invalid as testString does not meet the minLength requirement of 2...
+            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
+
+            dummyEvent.TestString = "do";
+
+            // Should be valid...
+            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
         }
     }
 }

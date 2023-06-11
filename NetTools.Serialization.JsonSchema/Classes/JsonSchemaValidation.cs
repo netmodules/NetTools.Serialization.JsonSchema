@@ -1,0 +1,406 @@
+﻿using NetTools.Serialization.JsonSchemaExtensions;
+using NetTools.Serialization.JsonSchemaInterfaces;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace NetTools.Serialization.JsonSchemaClasses
+{
+    internal static class JsonSchemaValidation
+    {
+        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, string name = "property")
+        {
+            details = new List<string>();
+            
+            if (schema == null)
+            {
+                details.Add("The reference schema to validate against is null.");
+                return false;
+            }
+
+            if (schema.TryGetValue("required", out var requiredProperties) && requiredProperties is IEnumerable<string> required && required.Count() > 0)
+            {
+                var dictionary = obj as Dictionary<string, object>;
+
+                foreach (var property in required)
+                {
+                    if (dictionary == null || !dictionary.ContainsKey(property))
+                    {
+                        details.Add($"The following property is required: {property}");
+                        return false;
+                    }
+                }
+            }
+
+            var type = schema.GetDictionaryValueRecursive<string>(null, "type");
+            
+            if (type == "object")
+            {
+                var properties = schema.GetDictionaryValueRecursive<Dictionary<string, object>>(null, "properties");
+                var dictionary = obj as Dictionary<string, object>;
+
+                if (properties != null)
+                {
+                    foreach (var property in properties)
+                    {
+                        var propertyDic = property.Value as Dictionary<string, object>;
+                        object propertyValue = null;
+
+                        dictionary?.TryGetValue(property.Key, out propertyValue);
+
+                        if (propertyDic != null && propertyDic.GetDictionaryValueRecursive(false, "required")
+                            && (dictionary == null || !dictionary.ContainsKey(property.Key)))
+                        {
+                            details.Add($"The following property is required: {property.Key}");
+                            return false;
+                        }
+
+                        if (!ValidateField(propertyValue, propertyDic, validators, out details, property.Key))
+                        {
+                            return false;
+                        }
+                    }
+
+                    // need to handle additionalProperties anyOf oneOf...
+                    //var additionalProperties = schema.GetDictionaryValueRecursive<Dictionary<string, object>>(null, "additionalProperties");
+                }
+            }
+            else if (type == "array" && !ValidateArray(name, obj, schema, out details))
+            {
+                return false;
+            }
+            else if (type == "boolean" && obj != null && !(obj is bool))
+            {
+                details.Add($"{name} must be a boolean value.");
+                return false;
+            }
+            else if ((type == "integer" || type == "number") && !ValidateNumericValue(name, obj, schema, out details, type == "integer"))
+            {
+                return false;
+            }
+            else if (type == "string" && !ValidateString(validators, name, obj, schema, out details))
+            {
+                return false;
+            }
+                
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static bool ValidateArray(string name, object obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            details = new List<string>();
+
+            if (obj == null)
+            {
+                return true;
+            }
+
+            if (obj is IDictionary || !(obj is ICollection))
+            {
+                details.Add($"{name} must be an array value.");
+                return false;
+            }
+
+            var enumerable = obj as ICollection;
+
+            var items = schema.GetDictionaryValueRecursive(null as Dictionary<string, object>, "items");
+
+            if (items != null)
+            {
+                var itemTypes = new List<string>();
+                if (items.TryGetValue("type", out var type) && type != null)
+                {
+                    itemTypes.Add(type.ToString());
+                }
+
+                itemTypes.AddRange(items.Select(x => (x.Value as Dictionary<string, object>)?["type"] as string));
+
+                // Super inefficient but we must iterate each item and validate against the allowed items in items...
+                foreach (var i in enumerable)
+                {
+                    if (i is string && !itemTypes.Contains("string"))
+                    {
+                        details.Add($"{name} must not contain any string values: {i}");
+                        return false;
+                    }
+                    else if (i is bool && !itemTypes.Contains("boolean"))
+                    {
+                        details.Add($"{name} must not contain any boolean values: {i}");
+                        return false;
+                    }
+                    else if ((i is int || i is uint || i is long || i is ulong || i is short || i is ushort || i is float || i is double || i is decimal || i is byte) && !itemTypes.Contains("integer") && !itemTypes.Contains("number"))
+                    {
+                        details.Add($"{name} must not contain any numeric values: {i}");
+                        return false;
+                    }
+                    else if (i is IDictionary && !itemTypes.Contains("object"))
+                    {
+                        details.Add($"{name} must not contain any object values: {i}");
+                        return false;
+                    }
+                    else if (!(i is IDictionary) && i is ICollection && !itemTypes.Contains("array"))
+                    {
+                        details.Add($"{name} must not contain any array values: {i}");
+                        return false;
+                    }
+                }
+            }
+
+            var minItems = schema.GetDictionaryValueRecursive(0, "minItems");
+            
+            if (minItems > 0 && (enumerable == null || enumerable.Count < minItems))
+            {
+                details.Add($"{name} must contain a minimum of {minItems} items.");
+                return false;
+            }
+
+            var maxItems = schema.GetDictionaryValueRecursive(int.MaxValue, "maxItems");
+
+            if (maxItems > 0 && enumerable != null && enumerable.Count > maxItems)
+            {
+                details.Add($"{name} must contain a maximum of {minItems} items.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool ValidateString(IJsonSchemaStringValidators validators, string name, object obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            details = new List<string>();
+
+            if (obj == null)
+            {
+                return true;
+            }
+
+            if (!(obj is string))
+            {
+                details.Add($"{name} must be a string value.");
+                return false;
+            }
+
+            var str = obj as string;
+
+            var minLength = schema.GetDictionaryValueRecursive(0, "minLength");
+
+            if (minLength > 0 && str.Length < minLength)
+            {
+                details.Add($"{name} must be a minimum of {minLength} characters.");
+                return false;
+            }
+
+            var maxLength = schema.GetDictionaryValueRecursive(int.MaxValue, "maxLength");
+
+            if (maxLength > 0 && str.Length > maxLength)
+            {
+                details.Add($"{name} must be a maximum of {maxLength} items.");
+                return false;
+            }
+
+            if (schema.TryGetValue("pattern", out var pStr) && pStr != null)
+            {
+                var pattern = pStr.ToString();
+
+                if (!Regex.IsMatch(str, pattern))
+                {
+                    details.Add($"{name} must match the regular expression pattern: {pattern}");
+                    return false;
+                }
+            }
+
+            if (schema.TryGetValue("format", out var format))
+            {
+                switch (format)
+                {
+                    case "base64":
+                        if (!validators.Base64(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "color":
+                        if (!validators.Color(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "csv":
+                        if (!validators.Csv(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "date":
+                        if(!validators.DateTime(str))
+                        {
+                            details.Add($"{name} must match an ISO 8601 {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "duration":
+                        if (!validators.Duration(str))
+                        {
+                            details.Add($"{name} must match an ISO 8601 {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "email":
+                        if (!validators.Email(str))
+                        {
+                            details.Add($"{name} must match an {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "hostname":
+                        if (!validators.Hostname(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "html":
+                        if (!validators.Html(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "ipv4":
+                        if (!validators.IPV4(str))
+                        {
+                            details.Add($"{name} must match an {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "ipv6":
+                        if (!validators.IPV6(str))
+                        {
+                            details.Add($"{name} must match an {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "json":
+                        if (!validators.Json(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "multiline":
+                        if (!validators.Multiline(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "pngimagebase64":
+                        if (!validators.PngImageBase64(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "richtext":
+                        if (!validators.RichText(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "uri":
+                        if (!validators.Uri(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "xml":
+                        if (!validators.Xml(str))
+                        {
+                            details.Add($"{name} must match an {format} format.");
+                            return false;
+                        }
+                        break;
+                }
+            }
+            
+            return true;
+        }
+
+        static bool ValidateNumericValue(string name, object value, Dictionary<string, object> schema, out List<string> details, bool integer = false)
+        {
+            details = new List<string>();
+            
+            if (value == null)
+            {
+                return true;
+            }
+
+            if (!(value is string) && decimal.TryParse(value.ToString(), out var numVal))
+            {
+                if (integer && numVal % 1 != 0)
+                {
+                    details.Add($"{name} must be an integer value and must not contain a decimal point.");
+                    return false;
+                }
+
+                decimal min = 0;
+                decimal max = decimal.MaxValue;
+                decimal multipleOf = 0;
+
+                if (schema.TryGetValue("minimum", out var minObj)
+                    && minObj != null && decimal.TryParse(minObj.ToString(), out min) && numVal < min)
+                {
+                    details.Add($"{name} must be greater than or equal to {min}.");
+                    return false;
+                }
+
+                if (schema.TryGetValue("exclusiveMinimum", out var exMinObj)
+                    && exMinObj != null && decimal.TryParse(exMinObj.ToString(), out min) && numVal <= min)
+                {
+                    details.Add($"{name} must be greater than {min}.");
+                    return false;
+                }
+
+                if (schema.TryGetValue("maximum", out var maxObj)
+                    && maxObj != null && decimal.TryParse(maxObj.ToString(), out max) && numVal > max)
+                {
+                    details.Add($"{name} must be less than or equal to {max}.");
+                    return false;
+                }
+
+                if (schema.TryGetValue("exclusiveMaximum", out var exMaxObj)
+                    && exMaxObj != null && decimal.TryParse(exMaxObj.ToString(), out max) && numVal >= max)
+                {
+                    details.Add($"{name} must be less than {max}.");
+                    return false;
+                }
+
+                if (schema.TryGetValue("multipleOf", out var multipleObj)
+                    && multipleObj != null && decimal.TryParse(multipleObj.ToString(), out multipleOf) && numVal % multipleOf != 0)
+                {
+                    details.Add($"{name} must be multiples of {multipleOf}.");
+                    return false;
+                }
+            }
+            else
+            {
+                details.Add($"{name} must be a numeric value.");
+                return false;
+            }
+
+            return true;
+        }
+    }
+}

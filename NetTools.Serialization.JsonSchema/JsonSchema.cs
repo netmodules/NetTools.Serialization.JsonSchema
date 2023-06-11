@@ -15,6 +15,7 @@ namespace NetTools.Serialization
     public class JsonSchema
     {
         IJsonSchemaObjectParser Parser;
+        IJsonSchemaStringValidators Validators;
 
         /// <summary>
         /// A basic implementation of JSON Schema generation from .Net objects and types. For JSON Schema documentation see
@@ -24,9 +25,14 @@ namespace NetTools.Serialization
         /// Allows you to configure the default JSONSchemaObject parser. The default parser is enabled when a custom parser
         /// is not used.
         /// </param>
-        public JsonSchema(JsonSchemaOptions options)
+        /// <param name="stringValidators">
+        /// Allows you to assign the methods used for string validation. A default validator with basic validation is assigned
+        /// if a stringValidator is not provided. This is used 
+        /// </param>
+        public JsonSchema(JsonSchemaOptions options, IJsonSchemaStringValidators stringValidators = null)
         {
             Parser = new DefaultJsonSchemaObjectParser(options);
+            Validators = stringValidators == null ? new DefaultJsonSchemaStringValidators() : stringValidators;
         }
 
 
@@ -38,12 +44,14 @@ namespace NetTools.Serialization
         /// This option lets you add your own custom JsonSchemaObjectParser class. If this option is null, the default parser
         /// will be used.
         /// </param>
-        public JsonSchema(IJsonSchemaObjectParser parser)
+        /// <param name="stringValidators">
+        /// Allows you to assign the methods used for string validation. A default validator with basic validation is assigned
+        /// if a stringValidator is not provided.
+        /// </param>
+        public JsonSchema(IJsonSchemaObjectParser parser, IJsonSchemaStringValidators stringValidators = null)
         {
-            if (parser == null)
-            {
-                Parser = new DefaultJsonSchemaObjectParser();
-            }
+            Parser = parser == null ? new DefaultJsonSchemaObjectParser() : parser;
+            Validators = stringValidators == null ? new DefaultJsonSchemaStringValidators() : stringValidators;
         }
 
 
@@ -67,6 +75,7 @@ namespace NetTools.Serialization
             return FromJsonSchemaObject(schemaObject);
         }
 
+
         /// <summary>
         /// Returns a dictionary representation of a JSON Schema formatted object created from a <see cref="JsonSchemaObject"/>,
         /// use your favorite JSON Serialization class library to convert this dictionary to a JSON Schema object string.
@@ -76,6 +85,7 @@ namespace NetTools.Serialization
             return Parser.GetSchemaDictionaryFromJsonSchemaObject(schemaObject);
         }
 
+
         /// <summary>
         /// Returns a <see cref="JsonSchemaObject"/> that contains the required attributes and type information to generate a simple
         /// JSON Schema object. This method is used internally by <see cref="FromType(Type, byte)"/> and other methods, and is
@@ -84,6 +94,97 @@ namespace NetTools.Serialization
         public JsonSchemaObject GetJsonSchemaObject(Type t, byte propertyDepth)
         {
             return JsonSchemaHelpers.GetSchemaObject(t, propertyDepth, 0);
+        }
+
+
+        /// <summary>
+        /// This method will validate a dictionary representation of an object against the provided dictionary representation of a
+        /// "object" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(IDictionary<string, object> obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate a list representation of an array against the provided dictionary representation of a
+        /// "array" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(IList<object> obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate an array representation of an array against the provided dictionary representation of a
+        /// "array" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(object[] obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate a boolean representation of a boolean against the provided dictionary representation of a
+        /// "boolean" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(bool obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate an integer representation of an integer against the provided dictionary representation of a
+        /// "integer" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(int obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate a double representation of a double against the provided dictionary representation of a
+        /// "number" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(double obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
+        }
+
+
+        /// <summary>
+        /// This method will validate a string representation of a string against the provided dictionary representation of a
+        /// "string" JSON Schema and return details if the object is invalid. For objects that are nested, the provided schema must
+        /// contain nested schemas to validate against. Linked schemas in the form of URIs ($ref/$schema) for recursion are not
+        /// currently supported. Currently very basic validation is supported and some JSON schema fields will not invalidate where
+        /// invalid.
+        /// </summary>
+        public bool ValidateSchema(string obj, Dictionary<string, object> schema, out List<string> details)
+        {
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details);
         }
     }
 }

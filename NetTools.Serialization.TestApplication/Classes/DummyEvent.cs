@@ -4,6 +4,7 @@ using NetTools.Serialization.JsonSchemaAttributes;
 using System;
 using System.Collections.Generic;
 using System.Text; using NetTools.Serialization.JsonSchemaAttributes.Internal;
+using NetTools.Serialization.JsonSchemaEnums;
 
 namespace NetTools.Serialization.TestApplication
 {
@@ -21,17 +22,20 @@ namespace NetTools.Serialization.TestApplication
         [JsonSchemaTitle("Event Name")]
         [JsonSchemaDescription("Enter the event name")]
         [JsonSchemaTypeOverride(typeof(string))]
-        public EventName Name { get; set; }
+        [JsonSchemaMinLength(10)]
+        public string Name => "Dummy.Event";
 
-        [JsonName("meta"), JsonIgnore, JsonSchemaRequired]
+
+        [JsonName("meta"), /*JsonIgnore,*/ JsonSchemaRequired]
         public Dictionary<string, object> Meta { get; set; }
 
         public Dictionary<string, EventName> TestDictionaryOfType { get; set; }
 
-        [JsonSchemaRequired]
+        [JsonSchemaRequired, JsonSchemaMinItems(1)]
         public List<string> TestArrayOfStrings { get; set; }
 
         public List<object> TestArrayOfPrimitiveObject { get; set; }
+
 
         [JsonIgnore]
         public bool Handled { get; }
@@ -42,5 +46,71 @@ namespace NetTools.Serialization.TestApplication
         public TestClass TestClass { get; set; }
 
         public Uri TestUrl { get; set; }
+
+
+        [JsonSchemaMinMaxValue(1, 10)]
+        public int TestInt1 { get; set; }
+
+        [JsonSchemaMinValue(1000)]
+        public int TestInt2 { get; set; }
+
+        [JsonSchemaMaxValue(1000)]
+        [JsonSchemaMultipleOf(10)]
+        public int TestInt3 { get; set; }
+
+
+        [JsonSchemaMinMaxLength(2, 2)]
+        public string TestString { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Base64)]
+        public string TestBase64 { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Color)]
+        public string TestColor { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Csv)]
+        public string TestCsv { get; set; }
+
+        [JsonSchemaFormat(StringFormat.DateTime)]
+        public string TestDateTime { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Duration)]
+        public string TestDuration { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Email)]
+        public string TestEmail { get; set; }
+
+        [JsonSchemaFormat(StringFormat.HostName)]
+        public string TestHostname { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Html)]
+        public string TestHtml { get; set; }
+
+        [JsonSchemaFormat(StringFormat.IPv4)]
+        public string TestIpAddressv4 { get; set; }
+
+        [JsonSchemaFormat(StringFormat.IPv6)]
+        public string TestIpAddressv6 { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Json)]
+        public string TestJson { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Multiline)]
+        public string TestMultiline { get; set; }
+
+        [JsonSchemaFormat(StringFormat.None)]
+        public string TestNone { get; set; }
+
+        [JsonSchemaFormat(StringFormat.PngImageBase64)]
+        public string TestPngBase64 { get; set; }
+
+        [JsonSchemaFormat(StringFormat.RichText)]
+        public string TestRichText { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Uri)]
+        public string TestUri { get; set; }
+
+        [JsonSchemaFormat(StringFormat.Xml)]
+        public string TestXml { get; set; }
     }
 }
