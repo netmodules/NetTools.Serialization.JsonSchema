@@ -12,7 +12,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
 {
     internal static class JsonSchemaValidation
     {
-        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false, string name = "property")
+        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false, bool allowNumericStrings = false, string name = "property")
         {
             details = new List<string>();
             
@@ -28,7 +28,8 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
                 foreach (var property in required)
                 {
-                    if (dictionary == null || !dictionary.ContainsKey(property))
+                    if (dictionary == null || !dictionary.ContainsKey(property) || dictionary[property] == null
+                        || (dictionary[property] is string prop) && string.IsNullOrEmpty(prop))
                     {
                         details.Add($"The following property is required: {property}");
                         return false;
@@ -59,7 +60,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                             return false;
                         }
 
-                        if (!ValidateField(propertyValue, propertyDic, validators, out details, ignoreEnumCase, ignoreEnumSpaces, property.Key))
+                        if (!ValidateField(propertyValue, propertyDic, validators, out details, ignoreEnumCase, ignoreEnumSpaces, allowNumericStrings, property.Key))
                         {
                             return false;
                         }
@@ -69,7 +70,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     //var additionalProperties = schema.GetDictionaryValueRecursive<Dictionary<string, object>>(null, "additionalProperties");
                 }
             }
-            else if (type == "array" && !ValidateArray(name, obj, schema, out details))
+            else if (type == "array" && !ValidateArray(name, obj, schema, out details, ignoreEnumCase, ignoreEnumSpaces))
             {
                 return false;
             }
@@ -78,7 +79,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 details.Add($"{name} must be a boolean value.");
                 return false;
             }
-            else if ((type == "integer" || type == "number") && !ValidateNumericValue(name, obj, schema, out details, type == "integer"))
+            else if ((type == "integer" || type == "number") && !ValidateNumericValue(name, obj, schema, out details, type == "integer", allowNumericStrings))
             {
                 return false;
             }
@@ -132,7 +133,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// <summary>
         /// 
         /// </summary>
-        private static bool ValidateArray(string name, object obj, Dictionary<string, object> schema, out List<string> details)
+        private static bool ValidateArray(string name, object obj, Dictionary<string, object> schema, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false)
         {
             details = new List<string>();
 
@@ -161,9 +162,17 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
                 itemTypes.AddRange(items.Select(x => (x.Value as Dictionary<string, object>)?["type"] as string));
 
+                // Additional check for nested enum array...
+                var jsEnum = schema.GetDictionaryValueRecursive(null as string[], "enum");
+
                 // Super inefficient but we must iterate each item and validate against the allowed items in items...
                 foreach (var i in enumerable)
                 {
+                    if (jsEnum != null && !ValidateEnum(name, i, jsEnum, out details, ignoreEnumCase, ignoreEnumSpaces))
+                    {
+                        return false;
+                    }
+
                     if (i is string && !itemTypes.Contains("string"))
                     {
                         details.Add($"{name} must not contain any string values: {i}");
@@ -255,75 +264,146 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 }
             }
 
-            if (schema.TryGetValue("format", out var format))
+            List<object> formats = new List<object>();
+
+            if (schema.TryGetValue("format", out var f))
             {
+                formats.Add(f);
+            }
+
+            if (schema.TryGetValue("additionalFormats", out var a) && a is ICollection af)
+            {
+                foreach (var fo  in af)
+                {
+                    formats.Add(fo);
+                }
+            }
+
+            foreach (var format in formats)
+            {    
                 switch (format)
                 {
+                    case "alpha":
+                        if (validators != null && validators.Alpha != null && !validators.Alpha(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "alphanumeric":
+                        if (validators != null && validators.Alphanumeric != null && !validators.Alphanumeric(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "lowercase":
+                        if (validators != null && validators.Lowercase != null && !validators.Lowercase(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "uppercase":
+                        if (validators != null && validators.Uppercase != null && !validators.Uppercase(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "numeric":
+                        if (validators != null && validators.Numeric != null && !validators.Numeric(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "symbol":
+                        if (validators != null && validators.Symbol != null && !validators.Symbol(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
                     case "base64":
-                        if (!validators.Base64(str))
+                        if (validators != null && validators.Base64 != null && !validators.Base64(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "color":
-                        if (!validators.Color(str))
+                        if (validators != null && validators.Color != null && !validators.Color(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "csv":
-                        if (!validators.Csv(str))
+                        if (validators != null && validators.Csv != null && !validators.Csv(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "date":
-                        if(!validators.DateTime(str))
+                        if (validators != null && validators.Date != null && !validators.DateTime(str))
+                        {
+                            details.Add($"{name} must match an ISO 8601 {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "date-time":
+                        if(validators != null && validators.DateTime != null && !validators.DateTime(str))
+                        {
+                            details.Add($"{name} must match an ISO 8601 {format} format.");
+                            return false;
+                        }
+                        break;
+                    case "time":
+                        if (validators != null && validators.Time != null && !validators.DateTime(str))
                         {
                             details.Add($"{name} must match an ISO 8601 {format} format.");
                             return false;
                         }
                         break;
                     case "duration":
-                        if (!validators.Duration(str))
+                        if (validators != null && validators.Duration != null && !validators.Duration(str))
                         {
                             details.Add($"{name} must match an ISO 8601 {format} format.");
                             return false;
                         }
                         break;
                     case "email":
-                        if (!validators.Email(str))
+                        if (validators != null && validators.Email != null && !validators.Email(str))
                         {
                             details.Add($"{name} must match an {format} format.");
                             return false;
                         }
                         break;
                     case "hostname":
-                        if (!validators.Hostname(str))
+                        if (validators != null && validators.Hostname != null && !validators.Hostname(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "html":
-                        if (!validators.Html(str))
+                        if (validators != null && validators.Html != null && !validators.Html(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "ipv4":
-                        if (!validators.IPV4(str))
+                        if (validators != null && validators.IPV4 != null && !validators.IPV4(str))
                         {
                             details.Add($"{name} must match an {format} format.");
                             return false;
                         }
                         break;
                     case "ipv6":
-                        if (!validators.IPV6(str))
+                        if (validators != null && validators.IPV6 != null && !validators.IPV6(str))
                         {
                             details.Add($"{name} must match an {format} format.");
                             return false;
@@ -337,35 +417,35 @@ namespace NetTools.Serialization.JsonSchemaClasses
                         }
                         break;
                     case "multiline":
-                        if (!validators.Multiline(str))
+                        if (validators != null && validators.Multiline != null && !validators.Multiline(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "pngimagebase64":
-                        if (!validators.PngImageBase64(str))
+                        if (validators != null && validators.PngImageBase64 != null && !validators.PngImageBase64(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "richtext":
-                        if (!validators.RichText(str))
+                        if (validators != null && validators.RichText != null && !validators.RichText(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "uri":
-                        if (!validators.Uri(str))
+                        if (validators != null && validators.Uri != null && !validators.Uri(str))
                         {
                             details.Add($"{name} must match a {format} format.");
                             return false;
                         }
                         break;
                     case "xml":
-                        if (!validators.Xml(str))
+                        if (validators != null && validators.Xml != null && !validators.Xml(str))
                         {
                             details.Add($"{name} must match an {format} format.");
                             return false;
@@ -377,7 +457,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
             return true;
         }
 
-        static bool ValidateNumericValue(string name, object value, Dictionary<string, object> schema, out List<string> details, bool integer = false)
+        static bool ValidateNumericValue(string name, object value, Dictionary<string, object> schema, out List<string> details, bool integer = false, bool allowNumericStrings = false)
         {
             details = new List<string>();
             
@@ -386,7 +466,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 return true;
             }
 
-            if (!(value is string) && decimal.TryParse(value.ToString(), out var numVal))
+            if ((allowNumericStrings || !(value is string)) && decimal.TryParse(value.ToString(), out var numVal))
             {
                 if (integer && numVal % 1 != 0)
                 {

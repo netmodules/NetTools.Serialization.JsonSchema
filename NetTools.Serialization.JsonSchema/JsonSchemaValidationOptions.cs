@@ -21,5 +21,12 @@ namespace NetTools.Serialization
         /// extended enum parsing.
         /// </summary>
         public bool IgnoreEnumSpaces { get; set; }
+
+
+        /// <summary>
+        /// Tells JSON Schema validation to validate integers/numbers as true if the value is a numeric string. This
+        /// adds support for the NetTools.Serialization.Json extended integer/number parsing.
+        /// </summary>
+        public bool AllowNumbersAsStrings { get; set; }
     }
 }

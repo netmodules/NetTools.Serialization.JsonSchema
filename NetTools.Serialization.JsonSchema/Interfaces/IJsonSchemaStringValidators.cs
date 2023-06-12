@@ -12,6 +12,36 @@ namespace NetTools.Serialization.JsonSchemaInterfaces
     public interface IJsonSchemaStringValidators
     {
         /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Alpha">Alpha</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Alpha { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Alphanumeric">Alphanumeric</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Alphanumeric { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Lowercase">Lowercase</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Lowercase { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Uppercase">Uppercase</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Uppercase { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Numeric">Numeric</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Numeric { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Symbol">Symbol</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Symbol { get; set; }
+
+        /// <summary>
         /// Provides a validator method for the <see cref="StringFormat.Base64">Base64</see> <see cref="JsonSchemaFormat">string format</see>
         /// </summary>
         public Func<string, bool> Base64 { get; set; }
@@ -29,7 +59,17 @@ namespace NetTools.Serialization.JsonSchemaInterfaces
         /// <summary>
         /// Provides a validator method for the <see cref="StringFormat.DateTime">DateTime</see> <see cref="JsonSchemaFormat">string format</see>
         /// </summary>
+        public Func<string, bool> Date { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.DateTime">DateTime</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
         public Func<string, bool> DateTime { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.DateTime">DateTime</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Time { get; set; }
 
         /// <summary>
         /// Provides a validator method for the <see cref="StringFormat.Duration">Duration</see> <see cref="JsonSchemaFormat">string format</see>

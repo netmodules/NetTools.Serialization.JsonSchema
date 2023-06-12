@@ -25,13 +25,26 @@ namespace NetTools.Serialization
         /// Allows you to configure the default JSONSchemaObject parser. The default parser is enabled when a custom parser
         /// is not used.
         /// </param>
+        public JsonSchema(JsonSchemaOptions options)
+        {
+            Parser = new DefaultJsonSchemaObjectParser(options);
+        }
+
+        /// <summary>
+        /// A basic implementation of JSON Schema generation from .Net objects and types. For JSON Schema documentation see
+        /// <see href="https://json-schema.org/understanding-json-schema/UnderstandingJSONSchema.pdf"/>.
+        /// </summary>
+        /// <param name="options">
+        /// Allows you to configure the default JSONSchemaObject parser. The default parser is enabled when a custom parser
+        /// is not used.
+        /// </param>
         /// <param name="stringValidators">
         /// Allows you to assign the methods used for string validation. A default validator with basic validation is assigned
         /// if a stringValidator is not provided. This is used 
         /// </param>
-        public JsonSchema(JsonSchemaOptions options, IJsonSchemaStringValidators stringValidators = null)
+        public JsonSchema(JsonSchemaOptions options, IJsonSchemaStringValidators stringValidators)
+            : this(options)
         {
-            Parser = new DefaultJsonSchemaObjectParser(options);
             Validators = stringValidators == null ? new DefaultJsonSchemaStringValidators() : stringValidators;
         }
 
@@ -106,7 +119,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(IDictionary<string, object> obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -119,7 +132,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(IList<object> obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -132,7 +145,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(object[] obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -145,7 +158,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(bool obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -158,7 +171,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(int obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -171,7 +184,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(double obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
 
 
@@ -184,7 +197,7 @@ namespace NetTools.Serialization
         /// </summary>
         public bool ValidateSchema(string obj, Dictionary<string, object> schema, out List<string> details, JsonSchemaValidationOptions options = null)
         {
-            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false);
+            return JsonSchemaValidation.ValidateField(obj, schema, Validators, out details, options != null ? options.IgnoreEnumCasing : false, options != null ? options.IgnoreEnumSpaces : false, options != null ? options.AllowNumbersAsStrings : false);
         }
     }
 }

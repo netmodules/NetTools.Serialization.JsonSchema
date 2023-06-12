@@ -77,9 +77,55 @@ namespace NetTools.Serialization.JsonSchemaEnums
         Color,
 
         /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain alpha
+        /// characters (no numbers or symbols).
+        /// </summary>
+        Alpha,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain alpha
+        /// characters and/or numbers (no symbols).
+        /// </summary>
+        Alphanumeric,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain lowercase
+        /// characters.
+        /// </summary>
+        Lowercase,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain uppercase
+        /// characters.
+        /// </summary>
+        Uppercase,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain numbers
+        /// characters.
+        /// </summary>
+        Numeric,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchemaAttributes: This tells the formatter that this string must only contain symbol
+        /// characters (no alpha characters or numbers).
+        /// </summary>
+        Symbol,
+
+        /// <summary>
+        /// Built-in: Date representation, as defined by <see href="http://tools.ietf.org/html/rfc3339"/> RFC 3339, section 5.6.
+        /// </summary>
+        Date,
+
+        /// <summary>
         /// Built-in: Date representation, as defined by <see href="http://tools.ietf.org/html/rfc3339"/> RFC 3339, section 5.6.
         /// </summary>
         DateTime,
+
+        /// <summary>
+        /// Built-in: Date representation, as defined by <see href="http://tools.ietf.org/html/rfc3339"/> RFC 3339, section 5.6.
+        /// </summary>
+        Time,
 
         /// <summary>
         /// Built-in: Internet email address, <see href="http://tools.ietf.org/html/rfc5322"/> RFC 5322, section 3.4.1.

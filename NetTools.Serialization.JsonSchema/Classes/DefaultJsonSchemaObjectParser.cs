@@ -361,7 +361,12 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 schema.Add("exclusiveMinimum", true);
 
             if (o.Attribute.Format != StringFormat.None)
-                schema.Add("format", o.Attribute.Format.ToString().ToLowerInvariant());
+                schema.Add("format", o.Attribute.Format.ToString().ToLowerInvariant() == "datetime"
+                    ? "date-time" : o.Attribute.Format.ToString().ToLowerInvariant());
+
+            if (o.Attribute.AdditionalFormats != null)
+                schema.Add("additionalFormats", o.Attribute.AdditionalFormats.Select(x=> x.ToString().ToLowerInvariant() == "datetime"
+                    ? "date-time" : o.Attribute.Format.ToString().ToLowerInvariant()));
 
             if (o.Attribute.Maximum != null)
                 schema.Add("maximum", o.Attribute.Maximum);

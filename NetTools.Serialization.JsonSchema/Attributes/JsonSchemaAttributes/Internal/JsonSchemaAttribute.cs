@@ -138,6 +138,13 @@ namespace NetTools.Serialization.JsonSchemaAttributes.Internal
         /// </summary>
         public StringFormat Format { get; internal set; } = StringFormat.None;
 
+        /// <summary>
+        /// Valid on string: This is a custom schema field added by NetTools.Serialization.JsonSchemaAttributes that helps a schema creator by specifying additional string formats.
+        /// The format keyword allows for basic semantic validation on certain kinds of string values that are commonly used. This allows values to be constrained beyond what the
+        /// other tools in JSON Schema, including Regular Expressions can do.
+        /// </summary>
+        public List<StringFormat> AdditionalFormats { get; internal set; } = null;
+
         #endregion
 
 

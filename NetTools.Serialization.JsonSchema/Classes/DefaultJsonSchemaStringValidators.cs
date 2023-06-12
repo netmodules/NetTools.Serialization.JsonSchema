@@ -1,4 +1,5 @@
 ﻿using NetTools.Serialization.JsonSchemaAttributes;
+using NetTools.Serialization.JsonSchemaEnums;
 using NetTools.Serialization.JsonSchemaInterfaces;
 using System;
 using System.Buffers.Text;
@@ -15,6 +16,103 @@ namespace NetTools.Serialization.JsonSchemaClasses
 {
     internal class DefaultJsonSchemaStringValidators : IJsonSchemaStringValidators
     {
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only alpha characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Alpha { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsLetter(x));
+            }
+            catch { }
+            return false;
+        };
+
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only alpha and numeric characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Alphanumeric { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsLetterOrDigit(x));
+            }
+            catch { }
+            return false;
+        };
+
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only lowercase characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Lowercase { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsLower(x));
+            }
+            catch { }
+            return false;
+        };
+
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only uppercase characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Uppercase { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsUpper(x));
+            }
+            catch { }
+            return false;
+        };
+
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only numeric characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Numeric { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsNumber(x));
+            }
+            catch { }
+            return false;
+        };
+
+        /// <summary>
+        /// The default assigned string validator will will check to see if a string contains only symbol characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Symbol { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || property.All(x => char.IsSymbol(x));
+            }
+            catch { }
+            return false;
+        };
+
+
         /// <summary>
         /// The default assigned string validator will attempt to convert the property value from a Base64 string into an array
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
@@ -85,11 +183,45 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
         /// </summary>
+        public Func<string, bool> Date { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || System.DateTime.TryParse($"{property}T00:00:00Z", out _);
+            }
+            catch { }
+            return false;
+        };
+
+
+        /// <summary>
+        /// The default assigned string validator will attempt to parse the string value using the DateTime.TryParse method with
+        /// no formats or styles overrides used and return true if property is null (empty) or the parse is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
         public Func<string, bool> DateTime { get; set; } = (property) =>
         {
             try
             {
                 return string.IsNullOrEmpty(property) || System.DateTime.TryParse(property, out _);
+            }
+            catch { }
+            return false;
+        };
+
+
+        /// <summary>
+        /// The default assigned string validator will attempt to parse the string value using the DateTime.TryParse method with
+        /// no formats or styles overrides used and return true if property is null (empty) or the parse is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Time { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || System.DateTime.TryParse($"0001-01-01T{property}", out _);
             }
             catch { }
             return false;

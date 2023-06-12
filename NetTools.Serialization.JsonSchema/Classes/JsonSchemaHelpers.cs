@@ -268,6 +268,23 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 attribute.ExclusiveMaximum = attribute.ExclusiveMaximum || other.ExclusiveMaximum;
                 attribute.ExclusiveMinimum = attribute.ExclusiveMinimum || other.ExclusiveMinimum;
                 attribute.Format = attribute.Format != StringFormat.None ? attribute.Format : other.Format;
+
+                if (other.AdditionalFormats != null)
+                {
+                    if (attribute.AdditionalFormats == null)
+                    {
+                        attribute.AdditionalFormats = new List<StringFormat>();
+                    }
+
+                    foreach (var format in other.AdditionalFormats)
+                    {
+                        if (!attribute.AdditionalFormats.Contains(format))
+                        {
+                            attribute.AdditionalFormats.Add(format);
+                        }
+                    }
+                }
+
                 attribute.Hidden = attribute.Hidden || other.Hidden;
                 attribute.Maximum = attribute.Maximum != null ? attribute.Maximum : other.Maximum;
                 attribute.MaxItems = attribute.MaxItems != null ? attribute.MaxItems : other.MaxItems;
