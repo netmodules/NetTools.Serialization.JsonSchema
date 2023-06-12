@@ -126,8 +126,12 @@ namespace NetTools.Serialization.TestApplication
 
             dummyEvent.TestString = "do";
 
+            var dummyDictionary = dummyEvent.ToDictionary();
             // Should be valid...
-            validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
+            validates = jsonSchema.ValidateSchema(dummyDictionary, dummySchema, out details);
+
+            dummyDictionary["testEnum"] = "blahblah";
+            validates = jsonSchema.ValidateSchema(dummyDictionary, dummySchema, out details);
         }
     }
 }

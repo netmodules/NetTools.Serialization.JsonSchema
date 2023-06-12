@@ -126,7 +126,17 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 }
             }
 
-            details.Add($"{name} must be equal to one of the following enum values: {string.Join(", ", jsEnum)}.");
+            var error = $"{name} must be equal to one of the following enum values: ";
+
+            // For some reason string.Join(", " jsEnum) doesn't work and just outputs "System.String[]" so having
+            // to iterate manually for the second time to generate output message...
+            foreach (var e in jsEnum)
+            {
+                error += e.ToString() + ", ";
+            }  
+
+            // Try and work out what typeof(jsEnum) is (string[], List<object>, or List<string>)...
+            details.Add(error.TrimEnd(' ', ',') + ".");
             return false;
         }
 
