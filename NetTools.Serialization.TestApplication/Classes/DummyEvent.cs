@@ -17,6 +17,9 @@ namespace NetTools.Serialization.TestApplication
     [JsonSchemaTitle("Dummy Event")]
     [JsonSchemaDescription("This is a dummy event")]
     [JsonSchemaRequired("Name"), JsonSchemaAdditionalProperties(false)]
+    [JsonSchemaMinMaxLength(2, 2)]
+    [JsonSchemaCustom("customAttribute", true)]
+    [JsonSchemaCustom("customAttribute2", 12345)]
     internal class DummyEvent //: IEvent
     {
         [JsonSchemaTitle("Event Name")]
@@ -60,6 +63,9 @@ namespace NetTools.Serialization.TestApplication
 
 
         [JsonSchemaMinMaxLength(2, 2)]
+        [JsonSchemaCustom("customAttribute", "string")]
+        [JsonSchemaCustom("customAttribute2", 1.2)]
+        [JsonSchemaFormat(StringFormat.FileBase64)]
         public string TestString { get; set; }
 
         [JsonSchemaFormat(StringFormat.Base64)]

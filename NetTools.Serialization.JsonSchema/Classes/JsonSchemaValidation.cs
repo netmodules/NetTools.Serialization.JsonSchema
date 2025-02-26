@@ -336,6 +336,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                         }
                         break;
                     case "base64":
+                    case "filebase64":
                         if (validators != null && validators.Base64 != null && !validators.Base64(str))
                         {
                             details.Add($"{name} must match a {format} format.");
@@ -434,6 +435,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                         }
                         break;
                     case "pngimagebase64":
+                    case "filepngimagebase64":
                         if (validators != null && validators.PngImageBase64 != null && !validators.PngImageBase64(str))
                         {
                             details.Add($"{name} must match a {format} format.");

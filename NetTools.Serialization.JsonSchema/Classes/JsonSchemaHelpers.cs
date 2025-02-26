@@ -330,6 +330,20 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 attribute.ValueNamingConvention = attribute.ValueNamingConvention > other.ValueNamingConvention
                     ? attribute.ValueNamingConvention
                     : other.ValueNamingConvention;
+
+                if (other.CustomAttributes != null)
+                {
+                    if (attribute.CustomAttributes == null)
+                    {
+                        attribute.CustomAttributes = new Dictionary<string, object>();
+                    }
+
+                    other.CustomAttributes.All((x) =>
+                    {
+                        attribute.CustomAttributes[x.Key] = x.Value;
+                        return true;
+                    });
+                }
             }
 
             return attributes[0];

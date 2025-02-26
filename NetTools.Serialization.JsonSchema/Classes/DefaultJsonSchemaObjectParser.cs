@@ -406,6 +406,14 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
             if (o.Attribute.UniqueItems)
                 schema.Add("uniqueItems", true);
+
+            if (o.Attribute.CustomAttributes != null)
+            {
+                foreach (var att in o.Attribute.CustomAttributes)
+                {
+                    schema[att.Key] = att.Value;
+                }
+            }
         }
 
 

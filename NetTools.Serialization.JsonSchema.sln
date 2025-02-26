@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTools.Serialization.JsonSchema", "NetTools.Serialization.JsonSchema\NetTools.Serialization.JsonSchema.csproj", "{F431D2A0-270C-41DB-BA42-AE8B486043CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTools.Serialization.TestApplication", "NetTools.Serialization.TestApplication\NetTools.Serialization.TestApplication.csproj", "{70D4A79B-0AB9-4F02-BB06-809A39E975B7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTools.Serialization.JsonSchema.UnitTest", "NetTools.Serialization.JsonSchema.UnitTest\NetTools.Serialization.JsonSchema.UnitTest.csproj", "{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D4A79B-0AB9-4F02-BB06-809A39E975B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47DBD959-C5DA-45ED-AE9A-69CF3411EADF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

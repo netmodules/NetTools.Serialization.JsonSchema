@@ -11,7 +11,7 @@ namespace NetTools.Serialization.JsonSchemaEnums
     public enum BasicType
     {
         /// <summary>
-        /// The unknown type is a custom type added by NetTools.Serialization.JsonSchemaAttributes.Events to allow a default if the attribute field is not set
+        /// The unknown type is a custom type added by NetTools.Serialization.JsonSchema to allow a default if the attribute field is not set
         /// by the declarer.
         /// </summary>
         Unknown = 0,
@@ -57,7 +57,15 @@ namespace NetTools.Serialization.JsonSchemaEnums
         Null,
 
         /// <summary>
-        /// Any is a custom type added by NetTools.Serialization.JsonSchemaAttributes.Events that specifies in the schema
+        /// FileArray is a custom type added by NetTools.Serialization.JsonSchema that specifies in the schema
+        /// that a property is an <see cref="Array"/> but hints that the property relates to a file and most
+        /// likely contains a byte array. This can be used for things such as form submission upload formatting
+        /// but default (or fallback) handling should be as a BasicType.<see cref="Array"/>
+        /// </summary>
+        FileArray,
+
+        /// <summary>
+        /// Any is a custom type added by NetTools.Serialization.JsonSchema that specifies in the schema
         /// that a property can have its value set to any object type
         /// </summary>
         Any
