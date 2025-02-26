@@ -57,14 +57,6 @@ namespace NetTools.Serialization.JsonSchemaEnums
         Null,
 
         /// <summary>
-        /// FileArray is a custom type added by NetTools.Serialization.JsonSchema that specifies in the schema
-        /// that a property is an <see cref="Array"/> but hints that the property relates to a file and most
-        /// likely contains a byte array. This can be used for things such as form submission upload formatting
-        /// but default (or fallback) handling should be as a BasicType.<see cref="Array"/>
-        /// </summary>
-        FileArray,
-
-        /// <summary>
         /// Any is a custom type added by NetTools.Serialization.JsonSchema that specifies in the schema
         /// that a property can have its value set to any object type
         /// </summary>

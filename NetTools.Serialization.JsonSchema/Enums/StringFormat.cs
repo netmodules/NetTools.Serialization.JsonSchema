@@ -55,6 +55,13 @@ namespace NetTools.Serialization.JsonSchemaEnums
         FilePngImageBase64,
 
         /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchema: This suggests to the formatter that the requested format is file bytes.
+        /// This format can be handled however required, such as if the object type is an array and the format is filebytes, any input can be transformed
+        /// where required. This value can be ignored if formatting is not required.
+        /// </summary>
+        FileBytes,
+
+        /// <summary>
         /// Custom format added by NetTools.Serialization.JsonSchema: This tells the formatter that this string is a CSV string representation of
         /// an object. This may allow the formatter to display a multi string formatter or container to display or input the comma separated values, for example.
         /// </summary>

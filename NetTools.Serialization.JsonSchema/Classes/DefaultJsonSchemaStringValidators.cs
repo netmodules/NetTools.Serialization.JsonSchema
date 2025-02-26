@@ -123,7 +123,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         {
             try
             {
-                return string.IsNullOrEmpty(property) || Convert.FromBase64String(property) != null;
+                return string.IsNullOrEmpty(property) || Convert.FromBase64String(property.Split(',').LastOrDefault()) != null;
             }
             catch { }
             return false;
@@ -350,7 +350,24 @@ namespace NetTools.Serialization.JsonSchemaClasses
         {
             try
             {
-                return string.IsNullOrEmpty(property) || Convert.FromBase64String(property) != null;
+                return string.IsNullOrEmpty(property) || Convert.FromBase64String(property.Split(',').LastOrDefault()) != null;
+            }
+            catch { }
+            return false;
+        };
+
+
+        /// <summary>
+        /// The default assigned string validator uses the same validation method as the Base64 method. This only validates that
+        /// the value is null (empty) or a Base64 encoded string, and does not validate that it is a PNG image. You can override
+        /// this method with your own function(string, bool) to invoke a more complex validation method when validation is
+        /// requested.
+        /// </summary>
+        public Func<string, bool> FileBytes { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || Convert.FromBase64String(property.Split(',').LastOrDefault()) != null;
             }
             catch { }
             return false;

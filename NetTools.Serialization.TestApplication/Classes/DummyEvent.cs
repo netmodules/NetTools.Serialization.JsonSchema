@@ -35,6 +35,7 @@ namespace NetTools.Serialization.TestApplication
         public Dictionary<string, EventName> TestDictionaryOfType { get; set; }
 
         [JsonSchemaRequired, JsonSchemaMinItems(1)]
+        [JsonSchemaFormat(StringFormat.FileBytes)]
         public List<string> TestArrayOfStrings { get; set; }
 
         public List<object> TestArrayOfPrimitiveObject { get; set; }

@@ -442,6 +442,13 @@ namespace NetTools.Serialization.JsonSchemaClasses
                             return false;
                         }
                         break;
+                    case "filebytes":
+                        if (validators != null && validators.FileBytes != null && !validators.FileBytes(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
                     case "richtext":
                         if (validators != null && validators.RichText != null && !validators.RichText(str))
                         {

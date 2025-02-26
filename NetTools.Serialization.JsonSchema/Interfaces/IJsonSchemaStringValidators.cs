@@ -82,7 +82,7 @@ namespace NetTools.Serialization.JsonSchemaInterfaces
         public Func<string, bool> Email { get; set; }
 
         /// <summary>
-        /// Provides a validator method for the <see cref="StringFormat.Hostname">Hostname</see> <see cref="JsonSchemaFormat">string format</see>
+        /// Provides a validator method for the <see cref="StringFormat.HostName">Hostname</see> <see cref="JsonSchemaFormat">string format</see>
         /// </summary>
         public Func<string, bool> Hostname { get; set; }
 
@@ -115,6 +115,11 @@ namespace NetTools.Serialization.JsonSchemaInterfaces
         /// Provides a validator method for the <see cref="StringFormat.PngImageBase64">PngImageBase64</see> <see cref="JsonSchemaFormat">string format</see>
         /// </summary>
         public Func<string, bool> PngImageBase64 { get; set; }
+
+        /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.FileBytes">FileBytes</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> FileBytes { get; set; }
 
         /// <summary>
         /// Provides a validator method for the <see cref="StringFormat.RichText">RichText</see> <see cref="JsonSchemaFormat">string format</see>
