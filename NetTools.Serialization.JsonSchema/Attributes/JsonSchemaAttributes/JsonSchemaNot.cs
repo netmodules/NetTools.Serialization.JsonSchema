@@ -14,7 +14,7 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     {
         public JsonSchemaNot(JsonSchemaAttribute[] not)
         {
-            throw new Exception("JsonSchemaNot is currently not supported.");
+            throw new NotImplementedException("JsonSchemaNot is currently not supported.");
         }
     }
 }

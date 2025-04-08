@@ -12,6 +12,9 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaTypeOverride : JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on all types: You can use this to tell JsonSchema to use a different .NET <see cref="Type"/> a reference when creating the JSON Schema for this specific target.
+        /// </summary>
         public JsonSchemaTypeOverride(Type type)
         {
             TypeOverride = type;

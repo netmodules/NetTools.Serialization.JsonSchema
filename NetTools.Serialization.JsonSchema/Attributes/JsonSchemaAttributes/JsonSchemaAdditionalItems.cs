@@ -14,15 +14,21 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaAdditionalItems : JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on object: This keyword is used to control the handling of extra stuff, that is, properties whose names are not listed in the
+        /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
+        /// properties will be allowed.
+        /// </summary>
         public JsonSchemaAdditionalItems(Type type)
         {
             AdditionalItems = type;
         }
 
         /// <summary>
-        /// 
+        /// Valid on object: This keyword is used to control the handling of extra stuff, that is, properties whose names are not listed in the
+        /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
+        /// properties will be allowed.
         /// </summary>
-        /// <param name="allowed"></param>
         public JsonSchemaAdditionalItems(bool allowed)
         {
             AdditionalItems = allowed;

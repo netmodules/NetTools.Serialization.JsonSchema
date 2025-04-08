@@ -20,13 +20,11 @@ namespace NetTools.Serialization.JsonSchemaAttributes
         /// JsonSchemaPropertyAttribute can be added to a type of object multiple times to define properties
         /// which must exist in the JSON schema for this property or field.
         /// </summary>
-        /// <param name="key">The name of the property</param>
-        /// <param name="value">a reference type to help identify the JSON schema used to validate that property</param>
         public JsonSchemaProperty(string key, Type value)
         {
             Key = key;
             Value = value;
-            throw new Exception("JsonSchemaProperty is currently not supported.");
+            throw new NotImplementedException("JsonSchemaProperty is currently not supported.");
         }
     }
 }

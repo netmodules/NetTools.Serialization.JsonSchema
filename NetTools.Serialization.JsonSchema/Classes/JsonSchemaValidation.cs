@@ -70,7 +70,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     //var additionalProperties = schema.GetDictionaryValueRecursive<Dictionary<string, object>>(null, "additionalProperties");
                 }
             }
-            else if (type == "array" && !ValidateArray(name, obj, schema, out details, ignoreEnumCase, ignoreEnumSpaces))
+            else if (type == "array" && !ValidateArray(validators, name, obj, schema, out details, ignoreEnumCase, ignoreEnumSpaces))
             {
                 return false;
             }
@@ -102,6 +102,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
         private static bool ValidateEnum(string name, object obj, ICollection jsEnum, out List<string> details, bool ignoreStringCase = false, bool ignoreStringSpaces = false)
         {
+            var str = "";
             details = new List<string>();
 
             if (obj == null || jsEnum == null)
@@ -109,14 +110,28 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 return true;
             }
 
-            if (ignoreStringSpaces && obj is string str)
+            if (ignoreStringSpaces && obj is string)
             {
-                obj = str.Replace(" ", "").Replace(".", "");
+                str = obj.ToString().Replace(" ", "").Replace(".", "").Replace("-", "");
+            }
+            else
+            {
+                str = obj.ToString();
             }
 
             foreach (var e in jsEnum)
             {
-                if (ignoreStringCase && e is string item && item.Equals(obj.ToString(), StringComparison.OrdinalIgnoreCase))
+                if (ignoreStringCase && ignoreStringSpaces && e is string item
+                    && (item.Equals(obj.ToString(), StringComparison.OrdinalIgnoreCase) || item.Equals(str, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return true;
+                }
+                else if (ignoreStringCase && e is string itm && itm.Equals(obj.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                else if (ignoreStringSpaces && e is string tem
+                    && (tem.Equals(obj.ToString(), StringComparison.Ordinal) || tem.Equals(str, StringComparison.Ordinal)))
                 {
                     return true;
                 }
@@ -143,7 +158,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// <summary>
         /// 
         /// </summary>
-        private static bool ValidateArray(string name, object obj, Dictionary<string, object> schema, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false)
+        private static bool ValidateArray(IJsonSchemaStringValidators validators, string name, object obj, Dictionary<string, object> schema, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false)
         {
             details = new List<string>();
 
@@ -178,35 +193,55 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 // Super inefficient but we must iterate each item and validate against the allowed items in items...
                 foreach (var i in enumerable)
                 {
-                    if (jsEnum != null && !ValidateEnum(name, i, jsEnum, out details, ignoreEnumCase, ignoreEnumSpaces))
+                    if (jsEnum != null && !ValidateEnum($"Child element of {name}", i, jsEnum, out details, ignoreEnumCase, ignoreEnumSpaces))
                     {
                         return false;
                     }
 
-                    if (i is string && !itemTypes.Contains("string"))
+                    if (i is string s)
                     {
-                        details.Add($"{name} must not contain any string values: {i}");
-                        return false;
+                        if (!itemTypes.Contains("string"))
+                        {
+                            details.Add($"{name} must not contain any string values: {i}");
+                            return false;
+                        }
+
+                        return ValidateString(validators, $"Child element of {name}", i, items, out details);
                     }
                     else if (i is bool && !itemTypes.Contains("boolean"))
                     {
                         details.Add($"{name} must not contain any boolean values: {i}");
                         return false;
                     }
-                    else if ((i is int || i is uint || i is long || i is ulong || i is short || i is ushort || i is float || i is double || i is decimal || i is byte) && !itemTypes.Contains("integer") && !itemTypes.Contains("number"))
+                    else if (i is int || i is uint || i is long || i is ulong || i is short || i is ushort || i is float || i is double || i is decimal || i is byte)
                     {
-                        details.Add($"{name} must not contain any numeric values: {i}");
-                        return false;
+                        if (!itemTypes.Contains("integer") && !itemTypes.Contains("number"))
+                        {
+                            details.Add($"{name} must not contain any numeric values: {i}");
+                            return false;
+                        }
+
+                        return ValidateNumericValue($"Child element of {name}", i, items, out details, itemTypes.Contains("integer"), false);
                     }
-                    else if (i is IDictionary && !itemTypes.Contains("object"))
+                    else if (i is IDictionary)
                     {
-                        details.Add($"{name} must not contain any object values: {i}");
-                        return false;
+                        if (!itemTypes.Contains("object"))
+                        {
+                            details.Add($"{name} must not contain any object values: {i}");
+                            return false;
+                        }
+
+                        return ValidateField(i, items, validators, out details, ignoreEnumCase, ignoreEnumSpaces, false, $"Child element of {name}");
                     }
-                    else if (!(i is IDictionary) && i is ICollection && !itemTypes.Contains("array"))
+                    else if (!(i is IDictionary) && i is ICollection)
                     {
-                        details.Add($"{name} must not contain any array values: {i}");
-                        return false;
+                        if (!itemTypes.Contains("array"))
+                        {
+                            details.Add($"{name} must not contain any array values: {i}");
+                            return false;
+                        }
+
+                        return ValidateArray(validators, $"Child element of {name}", i, items, out details, ignoreEnumCase, ignoreEnumSpaces);
                     }
                 }
             }

@@ -12,9 +12,12 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class JsonSchemaOneOf : JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on any type: Must be of type JsonSchemaAttribute.The current schema must be valid against exactly one of the subschemas. 
+        /// </summary>
         public JsonSchemaOneOf(Type type)
         {
-            throw new Exception("JsonSchemaOneOf is currently not supported.");
+            throw new NotImplementedException("JsonSchemaOneOf is currently not supported.");
         }
     }
 }

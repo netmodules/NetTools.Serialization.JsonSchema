@@ -7,31 +7,41 @@ using NetTools.Serialization.JsonSchemaAttributes.Internal;
 namespace NetTools.Serialization.JsonSchemaAttributes
 {
     /// <summary>
-    /// Valid on object: By default, the properties defined by the properties keyword are not required. However, one can provide a list of required
-    /// properties using the required keyword. The required keyword takes an array of one or more strings and these strings should be unique. This
-    /// field should be set at class level or could be ignored by the schema generator.
+    /// Valid on string: By default, there is no constraints on the length of a string.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaMinMaxLength : JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on string: By default, there is no constraints on the length of a string.
+        /// </summary>
         public JsonSchemaMinMaxLength(uint min, uint max)
         {
             MinLength = min;
             MaxLength = max;
         }
 
+        /// <summary>
+        /// Valid on string: By default, there is no constraints on the length of a string.
+        /// </summary>
         public JsonSchemaMinMaxLength(ulong min, ulong max)
         {
             MinLength = min;
             MaxLength = max;
         }
 
+        /// <summary>
+        /// Valid on string: By default, there is no constraints on the length of a string.
+        /// </summary>
         public JsonSchemaMinMaxLength(ushort min, ushort max)
         {
             MinLength = min;
             MaxLength = max;
         }
 
+        /// <summary>
+        /// Valid on string: By default, there is no constraints on the length of a string.
+        /// </summary>
         public JsonSchemaMinMaxLength(byte min, byte max)
         {
             MinLength = min;

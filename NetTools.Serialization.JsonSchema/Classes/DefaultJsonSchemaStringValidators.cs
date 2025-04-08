@@ -361,7 +361,9 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// The default assigned string validator uses the same validation method as the Base64 method. This only validates that
         /// the value is null (empty) or a Base64 encoded string, and does not validate that it is a PNG image. You can override
         /// this method with your own function(string, bool) to invoke a more complex validation method when validation is
-        /// requested.
+        /// requested. Note that <see cref="StringFormat.FileBytes"/> may be defined on byte array types to inform the formatter
+        /// to render a file upload option instead of a byte array and in this case, this validation method will not trigger if
+        /// the property type is not of type <see cref="string"/>.
         /// </summary>
         public Func<string, bool> FileBytes { get; set; } = (property) =>
         {

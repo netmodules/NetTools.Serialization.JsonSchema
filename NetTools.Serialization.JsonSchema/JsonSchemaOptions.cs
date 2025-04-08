@@ -6,6 +6,10 @@ using System.Text; using NetTools.Serialization.JsonSchemaAttributes.Internal;
 
 namespace NetTools.Serialization
 {
+    /// <summary>
+    /// Allows you to configure the default JSON Schema Object parser.The default parser is enabled when a custom parser
+    /// is not used.
+    /// </summary>
     public class JsonSchemaOptions
     {
         /// <summary>

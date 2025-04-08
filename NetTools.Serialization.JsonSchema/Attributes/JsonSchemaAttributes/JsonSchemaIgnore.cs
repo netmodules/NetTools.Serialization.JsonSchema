@@ -12,6 +12,9 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class JsonSchemaIgnore: JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on field and property types: This allows you to tell the json-schema generator to exclude the current property.
+        /// </summary>
         public JsonSchemaIgnore(bool ignore = true)
         {
             Hidden = ignore;

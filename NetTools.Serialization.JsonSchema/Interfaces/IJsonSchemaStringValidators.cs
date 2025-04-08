@@ -9,6 +9,10 @@ using NetTools.Serialization.JsonSchemaEnums;
 
 namespace NetTools.Serialization.JsonSchemaInterfaces
 {
+    /// <summary>
+    /// Provides a set of validators for the <see cref="JsonSchemaFormat">string format</see> attribute. You can use this interface to
+    /// define your own string format validators and assign them using <see cref="JsonSchema.JsonSchema(JsonSchemaOptions, IJsonSchemaStringValidators)"/>.
+    /// </summary>
     public interface IJsonSchemaStringValidators
     {
         /// <summary>

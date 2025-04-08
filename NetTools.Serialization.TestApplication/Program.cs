@@ -110,7 +110,7 @@ namespace NetTools.Serialization.TestApplication
             validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
 
             dummyEvent.TestInt1 = 1;
-
+            
             // Should be false as required fields are present but testInt2 is less than the minimum value of 1000...
             validates = jsonSchema.ValidateSchema(dummyEvent.ToDictionary(), dummySchema, out details);
 
@@ -127,11 +127,50 @@ namespace NetTools.Serialization.TestApplication
             dummyEvent.TestString = "do";
 
             var dummyDictionary = dummyEvent.ToDictionary();
+            
             // Should be valid...
             validates = jsonSchema.ValidateSchema(dummyDictionary, dummySchema, out details);
 
             dummyDictionary["testEnum"] = "blahblah";
             validates = jsonSchema.ValidateSchema(dummyDictionary, dummySchema, out details);
+
+            var testByteArrayValidation = new Dictionary<string, object>()
+            {
+                {
+                    "bytes",
+                    new int[]
+                    {
+                        256,
+                        257,
+                        258
+                    }
+                }
+            };
+
+            // Should be invalid as 256 is not a valid byte value...
+            validates = jsonSchema.ValidateSchema< TestByteArrayValidation>(testByteArrayValidation, out details);
+
+            var testByteArrayValidation2 = new Dictionary<string, object>()
+            {
+                {
+                    "bytes",
+                    new int[]
+                    {
+                        0,
+                        1,
+                        255
+                    }
+                }
+            };
+
+            // Should be valid as 255 is a valid byte value...
+            validates = jsonSchema.ValidateSchema<TestByteArrayValidation>(testByteArrayValidation2, out details);
+
         }
+    }
+
+    public class TestByteArrayValidation
+    {
+        public byte[] Bytes { get; set; }
     }
 }

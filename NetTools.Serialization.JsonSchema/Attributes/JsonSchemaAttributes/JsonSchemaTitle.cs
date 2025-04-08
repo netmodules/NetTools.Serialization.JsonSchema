@@ -13,6 +13,10 @@ namespace NetTools.Serialization.JsonSchemaAttributes
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaTitle : JsonSchemaAttribute
     {
+        /// <summary>
+        /// Valid on all types: This allows you to quickly set the title of the property which will
+        /// be used by the json-schema generator.
+        /// </summary>
         public JsonSchemaTitle(string title)
         {
             Title = title;
