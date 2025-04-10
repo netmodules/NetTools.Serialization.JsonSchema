@@ -505,6 +505,14 @@ namespace NetTools.Serialization.JsonSchemaClasses
                             return false;
                         }
                         break;
+                    case "password":
+                        if (validators != null && validators.Password != null && !validators.Password(str))
+                        {
+                            details.Add($"{name} must match a {format} format.");
+                            return false;
+                        }
+                        break;
+
                 }
             }
             

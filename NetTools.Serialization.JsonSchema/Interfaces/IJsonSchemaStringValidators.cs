@@ -26,6 +26,11 @@ namespace NetTools.Serialization.JsonSchemaInterfaces
         public Func<string, bool> Alphanumeric { get; set; }
 
         /// <summary>
+        /// Provides a validator method for the <see cref="StringFormat.Password">Password</see> <see cref="JsonSchemaFormat">string format</see>
+        /// </summary>
+        public Func<string, bool> Password { get; set; }
+
+        /// <summary>
         /// Provides a validator method for the <see cref="StringFormat.Lowercase">Lowercase</see> <see cref="JsonSchemaFormat">string format</see>
         /// </summary>
         public Func<string, bool> Lowercase { get; set; }

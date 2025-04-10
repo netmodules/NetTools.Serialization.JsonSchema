@@ -17,7 +17,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
     internal class DefaultJsonSchemaStringValidators : IJsonSchemaStringValidators
     {
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only alpha characters
+        /// The default assigned string validator will check to see if a string contains only alpha characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
@@ -33,7 +33,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         };
 
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only alpha and numeric characters
+        /// The default assigned string validator will check to see if a string contains only alpha and numeric characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
@@ -49,7 +49,25 @@ namespace NetTools.Serialization.JsonSchemaClasses
         };
 
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only lowercase characters
+        /// The default assigned string validator will check to see if a string contains alpha, numeric, and symbol characters
+        /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
+        /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
+        /// is requested.
+        /// </summary>
+        public Func<string, bool> Password { get; set; } = (property) =>
+        {
+            try
+            {
+                return string.IsNullOrEmpty(property) || (property.Length > 7
+                    && property.Any(x => char.IsLetter(x))
+                    && property.Any(x => char.IsDigit(x))
+                    && property.Any(x => char.IsSymbol(x)));
+            }
+            catch { }
+            return false;
+        };
+        /// <summary>
+        /// The default assigned string validator will check to see if a string contains only lowercase characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
@@ -65,7 +83,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         };
 
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only uppercase characters
+        /// The default assigned string validator will check to see if a string contains only uppercase characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
@@ -81,7 +99,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         };
 
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only numeric characters
+        /// The default assigned string validator will check to see if a string contains only numeric characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.
@@ -97,7 +115,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         };
 
         /// <summary>
-        /// The default assigned string validator will will check to see if a string contains only symbol characters
+        /// The default assigned string validator will check to see if a string contains only symbol characters
         /// and return true that the property validates if it is either null (empty) or conversion is successful. You can
         /// override this method with your own function(string, bool) to invoke a more complex validation method when validation
         /// is requested.

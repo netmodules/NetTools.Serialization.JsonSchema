@@ -17,7 +17,13 @@ namespace NetTools.Serialization.JsonSchemaEnums
         None = 0,
 
         /// <summary>
-        /// Custom format added by NetTools.Serialization.JsonSchema: // ISO 8601 Duration should be formatted as P[n]Y[n]M[n]DT[n]H[n]M[n]S.
+        /// Custom format added by NetTools.Serialization.JsonSchema: Tells the formatter to display an input or text field that shows the value
+        /// as a hidden password.
+        /// </summary>
+        Password,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchema: ISO 8601 Duration should be formatted as P[n]Y[n]M[n]DT[n]H[n]M[n]S.
         /// See <see href="https://en.wikipedia.org/wiki/ISO_8601">Durations</see>
         /// </summary>
         Duration,
