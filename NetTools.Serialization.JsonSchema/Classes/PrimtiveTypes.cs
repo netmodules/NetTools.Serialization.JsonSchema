@@ -64,7 +64,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                         , IntPtr.Size == 8 ? ulong.MaxValue : uint.MaxValue));
             }
 
-            // Speciall case for IntPtr, is IntPtr a built in type?
+            // Special case for IntPtr, is IntPtr a built in type?
             if (type == typeof(IntPtr))
                 return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(int.MinValue, int.MaxValue));
 
