@@ -46,6 +46,8 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(ushort.MinValue, ushort.MaxValue));
                 if (type == typeof(byte))
                     return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(byte.MinValue, byte.MaxValue));
+                if (type == typeof(sbyte))
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(sbyte.MinValue, sbyte.MaxValue));
                 if (type == typeof(float))
                     return new PrimitiveType(BasicType.Number, new JsonSchemaMinMaxValue(float.MinValue, float.MaxValue));
                 if (type == typeof(double))
@@ -54,6 +56,12 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     return new PrimitiveType(BasicType.Number, new JsonSchemaMinMaxValue(decimal.MinValue, decimal.MaxValue));
                 if (type == typeof(char))
                     return new PrimitiveType(BasicType.String, new JsonSchemaMinMaxLength(1,1));
+                if (type == typeof(nint))
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(IntPtr.Size == 8 ? long.MinValue : int.MinValue
+                        , IntPtr.Size == 8 ? long.MaxValue : int.MaxValue));
+                if (type == typeof(nuint))
+                    return new PrimitiveType(BasicType.Integer, new JsonSchemaMinMaxValue(IntPtr.Size == 8 ? ulong.MinValue : uint.MinValue
+                        , IntPtr.Size == 8 ? ulong.MaxValue : uint.MaxValue));
             }
 
             // Speciall case for IntPtr, is IntPtr a built in type?

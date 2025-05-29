@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<LangVersion>default</LangVersion>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Authors>John Earnshaw</Authors>
 	<Company>NetModules Foundation</Company>
@@ -13,11 +14,11 @@
 	<RepositoryType>Git</RepositoryType>
 	<RepositoryUrl>https://github.com/netmodules/NetTools.Serialization.JsonSchema</RepositoryUrl>  
     <Description>A .NET Standard 2.1 class library for generating simple JSON Schema objects from .NET Classes. See https://json-schema.org/ for more information regarding JSON Schema.</Description>
-    <Version>1.1.20</Version>
+    <Version>1.1.21</Version>
   </PropertyGroup>
 
   <ItemGroup>
-	<None Include="..\README.md" Pack="true" PackagePath="\"/>
+	<None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
