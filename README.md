@@ -2,6 +2,8 @@
 
 **NetTools.Serialization.JsonSchema** is a simple yet robust .NET Standard 2.1 class library for automatic JSON Schema generation from .NET objects and types. With zero dependencies and a lightweight design, this library offers an easy-to-use solution for developers needing seamless JSON Schema generation and validation.
 
+**For JSON Serialization** check out [NetTools.Serialization.Json](https://github.com/netmodules/NetTools.Serialization.Json).
+
 For more information on the official JSON Schema draft documentation and specification, visit [json-schema.org](http://json-schema.org/).
 
 ## Features
