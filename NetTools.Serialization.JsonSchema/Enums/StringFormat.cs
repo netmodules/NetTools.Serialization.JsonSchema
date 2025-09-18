@@ -177,6 +177,13 @@ namespace NetTools.Serialization.JsonSchemaEnums
         /// <summary>
         /// Built-in: A universal resource identifier (URI), according to <see href="http://tools.ietf.org/html/rfc3986"/> RFC3986.
         /// </summary>
-        Uri
+        Uri,
+
+        /// <summary>
+        /// Custom format added by NetTools.Serialization.JsonSchema: Tells the formatter to display an input or text field that sets an autocompletion value
+        /// that does not fill the input automatically. This is useful when rendering JSON Schema in HTML forms where a web browser may attempt to automatically
+        /// populate with values such as usernames and passwords.
+        /// </summary>
+        NoAutoComplete,
     }
 }
