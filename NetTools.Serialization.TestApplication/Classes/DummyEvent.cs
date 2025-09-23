@@ -26,6 +26,7 @@ namespace NetTools.Serialization.TestApplication
         [JsonSchemaDescription("Enter the event name")]
         [JsonSchemaTypeOverride(typeof(string))]
         [JsonSchemaMinLength(10)]
+        [JsonSchemaAdditionalFormat(StringFormat.NoAutoComplete)]
         public string Name => "Dummy.Event";
 
 

@@ -138,7 +138,7 @@ namespace NetTools.Serialization.TestApplication
             };
 
             // Should be invalid as 256 is not a valid byte value...
-            validates = jsonSchema.ValidateSchema< TestByteArrayValidation>(testByteArrayValidation, out details);
+            validates = jsonSchema.ValidateSchema<TestByteArrayValidation>(testByteArrayValidation, out details);
 
             var testByteArrayValidation2 = new Dictionary<string, object>()
             {
@@ -156,6 +156,7 @@ namespace NetTools.Serialization.TestApplication
             // Should be valid as 255 is a valid byte value...
             validates = jsonSchema.ValidateSchema<TestByteArrayValidation>(testByteArrayValidation2, out details);
 
+            System.Diagnostics.Debugger.Break();
         }
     }
 

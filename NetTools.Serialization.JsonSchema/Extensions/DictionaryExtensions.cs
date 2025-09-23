@@ -14,8 +14,10 @@ namespace NetTools.Serialization.JsonSchemaExtensions
         {
             try
             {
-                object value = dict[key];
-                return value is T ? (T)value : (T)Convert.ChangeType(value, typeof(T));
+                if (dict != null && dict.TryGetValue(key, out object value))
+                {
+                    return value is T ? (T)value : (T)Convert.ChangeType(value, typeof(T));
+                }
             }
             catch { }
             return @default;
