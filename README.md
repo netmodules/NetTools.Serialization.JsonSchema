@@ -40,9 +40,9 @@ public class Person
 }
 
 // Generate JSON Schema.
-var schema = JsonSchema.FromType<Person>();
+var schema = JsonSchema.Default.FromType<Person>();
 
-// Serialize the schema dictionary to JSON string.
+// Serialize the schema dictionary to JSON string using your favorite JSON serialization flavor.
 string jsonSchema = NetTools.Serialization.Json.ToJson(schema);
 Console.WriteLine(jsonSchema);
 ```
@@ -80,7 +80,9 @@ public class Product
 }
 
 // Generate JSON Schema with custom attributes
-var schema = JsonSchema.FromType<Product>();
+var schema = JsonSchema.Default.FromType<Product>();
+
+// Serialize the schema dictionary to JSON string using your favorite JSON serialization flavor.
 string jsonSchema = NetTools.Serialization.Json.ToJson(schema);
 Console.WriteLine(jsonSchema);
 ```
@@ -90,7 +92,7 @@ You can also validate JSON data against a generated schema:
 using NetTools.Serialization.JsonSchema;
 
 // Generate the JSON Schema for the Product class above.
-var schema = JsonSchema.FromType<Product>();
+var schema = JsonSchema.Default.FromType<Product>();
 
 // Define the object to validate, here we use a dictionary because NetTools.Serialization.JsonSchema,
 // but this can be just a valid JSON object string. 
@@ -102,7 +104,7 @@ var product = new Dictionary<string, object>
 };
 
 // Validate the object against our JSON schema.
-var valid = JsonSchemaValidation.ValidateSchema(product, schema, out var validationDetails);
+var valid = JsonSchema.Default.ValidateSchema(product, schema, out var validationDetails);
 
 // Output results
 Console.WriteLine(valid ? "Valid Product JSON!" : "Invalid Product JSON!");

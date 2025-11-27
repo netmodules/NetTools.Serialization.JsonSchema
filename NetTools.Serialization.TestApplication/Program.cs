@@ -154,8 +154,7 @@ namespace NetTools.Serialization.TestApplication
             };
 
             // Should be valid as 255 is a valid byte value...
-            validates = jsonSchema.ValidateSchema<TestByteArrayValidation>(testByteArrayValidation2, out details);
-
+            validates = JsonSchema.Default.ValidateSchema<TestByteArrayValidation>(testByteArrayValidation2, out details);
             System.Diagnostics.Debugger.Break();
         }
     }

@@ -12,7 +12,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
 {
     internal static class JsonSchemaValidation
     {
-        internal static bool ValidateField(object obj, Dictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false, bool allowNumericStrings = false, string name = "property")
+        internal static bool ValidateField(object obj, IDictionary<string, object> schema, IJsonSchemaStringValidators validators, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false, bool allowNumericStrings = false, string name = "property")
         {
             details = new List<string>();
             
@@ -158,7 +158,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// <summary>
         /// 
         /// </summary>
-        private static bool ValidateArray(IJsonSchemaStringValidators validators, string name, object obj, Dictionary<string, object> schema, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false)
+        private static bool ValidateArray(IJsonSchemaStringValidators validators, string name, object obj, IDictionary<string, object> schema, out List<string> details, bool ignoreEnumCase = false, bool ignoreEnumSpaces = false)
         {
             details = new List<string>();
 
@@ -175,7 +175,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
 
             var enumerable = obj as ICollection;
 
-            var items = schema.GetDictionaryValueRecursive(null as Dictionary<string, object>, "items");
+            var items = schema.GetDictionaryValueRecursive(null as IDictionary<string, object>, "items");
 
             if (items != null)
             {
@@ -185,7 +185,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
                     itemTypes.Add(type.ToString());
                 }
 
-                itemTypes.AddRange(items.Select(x => (x.Value as Dictionary<string, object>)?["type"] as string));
+                itemTypes.AddRange(items.Select(x => (x.Value as IDictionary<string, object>)?["type"] as string));
 
                 // Additional check for nested enum array...
                 var jsEnum = schema.GetDictionaryValueRecursive(null as string[], "enum");
@@ -265,7 +265,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
             return true;
         }
 
-        private static bool ValidateString(IJsonSchemaStringValidators validators, string name, object obj, Dictionary<string, object> schema, out List<string> details)
+        private static bool ValidateString(IJsonSchemaStringValidators validators, string name, object obj, IDictionary<string, object> schema, out List<string> details)
         {
             details = new List<string>();
 
@@ -519,7 +519,7 @@ namespace NetTools.Serialization.JsonSchemaClasses
             return true;
         }
 
-        static bool ValidateNumericValue(string name, object value, Dictionary<string, object> schema, out List<string> details, bool integer = false, bool allowNumericStrings = false)
+        static bool ValidateNumericValue(string name, object value, IDictionary<string, object> schema, out List<string> details, bool integer = false, bool allowNumericStrings = false)
         {
             details = new List<string>();
             
