@@ -71,5 +71,10 @@ namespace NetTools.Serialization
         /// modify the code to support the NetTools.Serialization.JsonSchema class library.
         /// </summary>
         public Dictionary<Type, JsonSchemaAttribute> TypeOverrides;
+
+        /// <summary>
+        /// Exclude the "$schema" property that indicates the schema draft version in the output JSON schema.
+        /// </summary>
+        public bool ExcludeSchemaDraft;
     }
 }

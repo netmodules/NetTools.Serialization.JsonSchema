@@ -3,13 +3,14 @@ using NetTools.Serialization.Attributes;
 using NetTools.Serialization.JsonSchemaAttributes;
 using System;
 using System.Collections.Generic;
-using System.Text; using NetTools.Serialization.JsonSchemaAttributes.Internal;
+using System.Text;
+using NetTools.Serialization.JsonSchemaAttributes.Internal;
 using NetTools.Serialization.JsonSchemaEnums;
 
 namespace NetTools.Serialization.TestApplication
 {
     /// <summary>
-    /// This class acts as a dummy event so we can deserialize an incomming event request for the event name only. This is an optimisation as
+    /// This class acts as a dummy event so we can deserialize an incoming event request for the event name only. This is an optimisation as
     /// initial deserialization requires only the event name so we can perform the second deserialization of the complete event once we can
     /// identify the concrete object type
     /// </summary>
@@ -43,7 +44,7 @@ namespace NetTools.Serialization.TestApplication
 
 
         [JsonIgnore]
-        public bool Handled { get; }
+        public bool Handled { get; private set; }
 
         [JsonSchemaReadOnly]
         public TestEnum TestEnum { get; set; }

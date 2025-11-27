@@ -19,7 +19,7 @@ namespace NetTools.Serialization.TestApplication
             var jsonSchema = new JsonSchema(new JsonSchemaOptions()
             {
                 AutoCamelCase = true,
-                SchemaRefUrl = new Uri("https://NetTools.com/json-schema/"),
+                //SchemaRefUrl = new Uri("https://NetTools.com/json-schema/"),
                 SchemaType = JsonSchemaOptions.JsonSchemaType.Shallow,
                 TypeOverrides = new Dictionary<Type, JsonSchemaAttribute> {
                     {

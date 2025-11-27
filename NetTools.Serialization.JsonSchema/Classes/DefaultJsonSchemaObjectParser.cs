@@ -38,18 +38,15 @@ namespace NetTools.Serialization.JsonSchemaClasses
         /// </summary>
         Dictionary<string, object> GetSchemaDictionaryFromJsonSchemaObject(JsonSchemaObject o, bool isRef = false)
         {
-            if (Options.TypeOverrides != null)
+            if (Options.TypeOverrides != null && Options.TypeOverrides.TryGetValue(o.TypeInfo.AsType(), out var overrideSchema) && overrideSchema != null)
             {
-                if (Options.TypeOverrides.TryGetValue(o.TypeInfo.AsType(), out var overrideSchema) && overrideSchema != null)
-                {
-                    o.Attribute = JsonSchemaHelpers.MergeJsonSchemaAttributes(overrideSchema, o.Attribute);
-                }
+                o.Attribute = JsonSchemaHelpers.MergeJsonSchemaAttributes(overrideSchema, o.Attribute);
             }
 
             var schema = new Dictionary<string, object>();
 
             // If the schema is top-level we add the schema draft property to the schema object.
-            if (!isRef)
+            if (!Options.ExcludeSchemaDraft && !isRef)
             {
                 schema.Add("$schema", SchemaDraft);
             }
@@ -128,6 +125,17 @@ namespace NetTools.Serialization.JsonSchemaClasses
                                 else
                                 {
                                     properties.Add(name, subSchemaRef);
+                                }
+                            }
+                            else
+                            {
+                                if (properties.ContainsKey(name))
+                                {
+                                    properties[name] = GetSchemaDictionaryFromJsonSchemaObject(m, true);
+                                }
+                                else
+                                {
+                                    properties.Add(name, GetSchemaDictionaryFromJsonSchemaObject(m, true));
                                 }
                             }
                         }
