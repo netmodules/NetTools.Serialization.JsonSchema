@@ -14,7 +14,7 @@
 	<RepositoryType>Git</RepositoryType>
 	<RepositoryUrl>https://github.com/netmodules/NetTools.Serialization.JsonSchema</RepositoryUrl>  
     <Description>A .NET Standard 2.1 class library for generating simple JSON Schema objects from .NET Classes. See https://json-schema.org/ for more information regarding JSON Schema.</Description>
-    <Version>1.1.26</Version>
+    <Version>1.1.27</Version>
   </PropertyGroup>
 
   <ItemGroup>
