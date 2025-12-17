@@ -43,6 +43,10 @@ namespace NetTools.Serialization.TestApplication
         public List<object> TestArrayOfPrimitiveObject { get; set; }
 
 
+        [JsonSchemaItems(typeof(string)), JsonSchemaPattern("abc")]
+        public List<object> TestArrayOfStringsWithJsonSchemaItems { get; set; }
+
+
         [JsonIgnore]
         public bool Handled { get; private set; }
 

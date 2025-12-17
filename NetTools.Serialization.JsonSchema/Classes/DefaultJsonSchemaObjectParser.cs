@@ -322,6 +322,31 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 {
                     // Do something in the future with support for setting additionalItems as another JSON schema...
                     var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.Items, 5, 0);
+                    genericItem.Attribute = new JsonSchemaAttributeGroup(o.Attribute)
+                    {
+                        Title = null,
+                        Default = null,
+                        Description = null,
+                        Items = null,
+                        MaxItems = null,
+                        MinItems = null,
+                        Hidden = false,
+                        AdditionalItems = null,
+                        AdditionalProperties = null,
+                        Required = null,
+                    };
+
+                    o.Attribute.AdditionalFormats = null;
+                    o.Attribute.ExclusiveMaximum = false;
+                    o.Attribute.ExclusiveMinimum = false;
+                    o.Attribute.Format = StringFormat.None;
+                    o.Attribute.Maximum = null;
+                    o.Attribute.Minimum = null;
+                    o.Attribute.MaxLength = null;
+                    o.Attribute.MinLength = null;
+                    o.Attribute.Pattern = null;
+                    o.Attribute.MultipleOf = null;
+                    
                     schema.Add("items", GetSchemaDictionaryFromJsonSchemaObject(genericItem, true));
                 }
             }

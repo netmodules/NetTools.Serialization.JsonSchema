@@ -21,7 +21,7 @@ namespace NetTools.Serialization
         {
             if (attributes == null || attributes.Length == 0)
             {
-                throw new Exception("The attributes paramerter must contain a minimum of 1 arguments to create a JsonSchemaAttribute group.");
+                throw new ArgumentNullException("The attributes parameter must contain a minimum of 1 arguments to create a JsonSchemaAttribute group.");
             }
 
             var schemas = new List<JsonSchemaAttribute>() { this, new JsonSchemaAttribute() };

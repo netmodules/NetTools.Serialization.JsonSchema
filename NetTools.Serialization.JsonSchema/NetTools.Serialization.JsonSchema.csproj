@@ -12,9 +12,10 @@
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<RepositoryType>Git</RepositoryType>
-	<RepositoryUrl>https://github.com/netmodules/NetTools.Serialization.JsonSchema</RepositoryUrl>  
-    <Description>A .NET Standard 2.1 class library for generating simple JSON Schema objects from .NET Classes. See https://json-schema.org/ for more information regarding JSON Schema.</Description>
-    <Version>1.1.27</Version>
+	<RepositoryUrl>https://github.com/netmodules/NetTools.Serialization.JsonSchema</RepositoryUrl>
+	<PackageTags>NewtonSoft Json.Net System.Text.Json System.Runtime.Serialization Text Runtime NetModules</PackageTags>
+    <Description>A .NET Standard 2.1 class library for generating simple JSON Schema type objects from .NET Classes. See https://json-schema.org/ for more information regarding JSON Schema.</Description>
+    <Version>1.1.28</Version>
   </PropertyGroup>
 
   <ItemGroup>

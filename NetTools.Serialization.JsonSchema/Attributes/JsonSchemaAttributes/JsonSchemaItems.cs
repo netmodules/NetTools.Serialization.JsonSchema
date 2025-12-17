@@ -3,31 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetTools.Serialization.JsonSchemaAttributes.Internal;
+using NetTools.Serialization.JsonSchemaEnums;
 
 namespace NetTools.Serialization.JsonSchemaAttributes
 {
     /// <summary>
-    /// Valid on object: This keyword is used to control the handling of extra stuff, that is, properties whose names are not listed in the
-    /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
-    /// properties will be allowed.
+    /// Valid on array: By default, the elements of the array may be anything at all.
+    /// However, it’s often useful to validate the items of the array against some schema as well. This is done using the items
+    /// and additionalItems keywords. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
+    /// You must set this attribute on a collection type such as an array or List{T} or it will be ignored.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class JsonSchemaItems : JsonSchemaAttribute
     {
         /// <summary>
-        /// Valid on object: This keyword is used to control the handling of extra stuff, that is, properties whose names are not listed in the
-        /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
-        /// properties will be allowed.
+        /// Valid on array: By default, the elements of the array may be anything at all.
+        /// However, it’s often useful to validate the items of the array against some schema as well. This is done using the items
+        /// and additionalItems keywords. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
+        /// You must set this attribute on a collection type such as an array or List{T} or it will be ignored.
         /// </summary>
         public JsonSchemaItems(Type type)
         {
             Items = type;
         }
 
+
         /// <summary>
-        /// Valid on object: This keyword is used to control the handling of extra stuff, that is, properties whose names are not listed in the
-        /// properties keyword. By default any additional properties are allowed. If the keyword is a boolean and set to false, no additional
-        /// properties will be allowed.
+        /// Valid on array: By default, the elements of the array may be anything at all.
+        /// However, it’s often useful to validate the items of the array against some schema as well. This is done using the items
+        /// and additionalItems keywords. When items is a single schema, the additionalItems keyword is meaningless, and it should not be used.
+        /// You must set this attribute on a collection type such as an array or List{T} or it will be ignored.
         /// </summary>
         public JsonSchemaItems()
         {
