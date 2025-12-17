@@ -322,8 +322,12 @@ namespace NetTools.Serialization.JsonSchemaClasses
                 {
                     // Do something in the future with support for setting additionalItems as another JSON schema...
                     var genericItem = JsonSchemaHelpers.GetSchemaObject(o.Attribute.Items, 5, 0);
-                    genericItem.Attribute = new JsonSchemaAttributeGroup(o.Attribute)
+                    
+                    // This allows for applying (some) JsonSchema attributes to nested item types.
+                    // It (kind of) does something about the comment above..?
+                    genericItem.Attribute = genericItem.Attribute ?? new JsonSchemaAttributeGroup(o.Attribute)
                     {
+                        Type = BasicType.Unknown,
                         Title = null,
                         Default = null,
                         Description = null,
@@ -334,8 +338,49 @@ namespace NetTools.Serialization.JsonSchemaClasses
                         AdditionalItems = null,
                         AdditionalProperties = null,
                         Required = null,
+                        UniqueItems = false,
+                        CustomAttributes = null,
+                        MaxProperties = null,
+                        MinProperties = null,
+                        Property = null,
+                        TypeOverride = null,
+                        Item = null,
+                        ReadOnly = false,
                     };
 
+                    genericItem.Attribute.AdditionalFormats
+                        = genericItem.Attribute.AdditionalFormats
+                        ?? o.Attribute.AdditionalFormats;
+                    genericItem.Attribute.ExclusiveMaximum
+                        = genericItem.Attribute.ExclusiveMaximum
+                        || o.Attribute.ExclusiveMaximum;
+                    genericItem.Attribute.ExclusiveMinimum
+                        = genericItem.Attribute.ExclusiveMinimum
+                        || o.Attribute.ExclusiveMinimum;
+                    genericItem.Attribute.Format
+                        = genericItem.Attribute.Format != StringFormat.None
+                        ? genericItem.Attribute.Format
+                        : o.Attribute.Format;
+                    genericItem.Attribute.Maximum
+                        = genericItem.Attribute.Maximum
+                        ?? o.Attribute.Maximum;
+                    genericItem.Attribute.Minimum
+                        = genericItem.Attribute.Minimum
+                        ?? o.Attribute.Minimum;
+                    genericItem.Attribute.MaxLength
+                        = genericItem.Attribute.MaxLength
+                        ?? o.Attribute.MaxLength;
+                    genericItem.Attribute.MinLength
+                        = genericItem.Attribute.MinLength
+                        ?? o.Attribute.MinLength;
+                    genericItem.Attribute.Pattern
+                        = genericItem.Attribute.Pattern
+                        ?? o.Attribute.Pattern;
+                    genericItem.Attribute.MultipleOf
+                        = genericItem.Attribute.MultipleOf
+                        ?? o.Attribute.MultipleOf;
+
+                    // Clear attribute values that have been applied to nested items...
                     o.Attribute.AdditionalFormats = null;
                     o.Attribute.ExclusiveMaximum = false;
                     o.Attribute.ExclusiveMinimum = false;

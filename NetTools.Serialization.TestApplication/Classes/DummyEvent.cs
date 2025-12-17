@@ -1,11 +1,12 @@
 ﻿//using NetTools.NetCore.Modules.Interfaces;
 using NetTools.Serialization.Attributes;
 using NetTools.Serialization.JsonSchemaAttributes;
+using NetTools.Serialization.JsonSchemaAttributes.Internal;
+using NetTools.Serialization.JsonSchemaEnums;
+using NetTools.Serialization.TestApplication.Classes;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NetTools.Serialization.JsonSchemaAttributes.Internal;
-using NetTools.Serialization.JsonSchemaEnums;
 
 namespace NetTools.Serialization.TestApplication
 {
@@ -46,6 +47,7 @@ namespace NetTools.Serialization.TestApplication
         [JsonSchemaItems(typeof(string)), JsonSchemaPattern("abc")]
         public List<object> TestArrayOfStringsWithJsonSchemaItems { get; set; }
 
+        public List<TestArrayItem> TestArray { get; set; }
 
         [JsonIgnore]
         public bool Handled { get; private set; }
